@@ -1,0 +1,65 @@
+{
+    "ventas": {
+        "filename": "01_TablaVentas.csv",
+        "dates": [
+            "fecha"
+        ],
+        "columns": {
+            "producto": "str",
+            "udsVenta": "float64"
+        },
+        "rows": 105657
+    },
+    "promos": {
+        "filename": "02_TablaPromos.csv",
+        "dates": [
+            "iniciopromo",
+            "finpromo"
+        ],
+        "columns": {
+            "id": "str",
+            "semanainicio": "Int64",
+            "semanafin": "Int64",
+            "Producto": "str",
+            "preciotarifa": "float64",
+            "preciopromocion": "float64",
+            "cantidad": "Int64",
+            "tipopromo": "str"
+        },
+        "rows": 6410
+    },
+    "stock": {
+        "filename": "03_TablaStock.csv",
+        "dates": [
+            "fecha"
+        ],
+        "columns": {
+            "Producto": "str",
+            "udsStock": "Int64"
+        },
+        "rows": 27930
+    },
+    "prevision": {
+        "filename": "04_PrevisionEmpresa.csv",
+        "dates": [
+            "fecha"
+        ],
+        "columns": {
+            "Producto": "str",
+            "udsPrevisionEmpresa": "float64"
+        },
+        "rows": 25576
+    },
+    "festivos": {
+        "filename": "05_Festivos.csv",
+        "dates": [
+            "fecha"
+        ],
+        "columns": {
+            "festividad":"str",
+            "diasemana":"str",
+            "festivo": "str"
+        },
+        "rows": 48
+    }
+}
