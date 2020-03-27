@@ -1,6 +1,7 @@
 import pandas as pd
 from src.read_config import read_source_data
 from src.utils import get_agg_stats
+from src.cleaner import clean_ventas
 
 def load_csv(dataset):
     print(" - Loading dataset {}...".format(dataset))
@@ -22,6 +23,10 @@ def load_csv(dataset):
     if df.shape != shape:
         print("[WARNING] Check out shape of dataset {}.".format(dataset))
         print("[WARNING] Should be {} and instead is {}.".format(shape, df.shape))
+
+    # Clean datasets
+    if dataset == "ventas": 
+        df = clean_ventas(df)
 
     print("     Dataset {} loaded.".format(dataset))
     return df
