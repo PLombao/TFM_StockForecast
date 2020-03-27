@@ -1,7 +1,7 @@
 import pandas as pd
 from src.read_config import read_source_data
 from src.utils import get_agg_stats
-from src.cleaner import clean_ventas
+from src.cleaner import clean_ventas, clean_promos, clean_stock, clean_prevision
 
 def load_csv(dataset):
     print(" - Loading dataset {}...".format(dataset))
@@ -27,12 +27,21 @@ def load_csv(dataset):
     # Clean datasets
     if dataset == "ventas": 
         df = clean_ventas(df)
+    elif dataset == "promos":
+        df = clean_promos(df)
+    elif dataset == "stock":
+        df = clean_stock(df)
+    elif dataset == "prevision":
+        df = clean_prevision(df)
+    else:
+        print("[WARNING] Cleaner not configured in load data for dataset {}.".format(dataset))
+
 
     print("     Dataset {} loaded.".format(dataset))
     return df
 
 def load_ventas_byproduct(ventas=None):
-    if type(ventas) == None:
+    if type(ventas) == type(None):
         ventas = load_csv("ventas")
     print(" - Building dataset ventas by product")
     venta_stats, venta_names = get_agg_stats("venta")
@@ -57,4 +66,9 @@ def load_data():
     ventas_byprod = load_ventas_byproduct(ventas)
     
     return ventas, promos, stock, prevision, festivos, ventas_byprod
+
+if __name__ == "__main__":
+    print("TESTING LOAD DATA")
+    ventas, promos, stock, prevision, festivos, ventas_byprod = load_data()
+
 
