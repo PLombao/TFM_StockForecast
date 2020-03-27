@@ -7,7 +7,7 @@ def print_df(df):
     print(df.info())
 
 dfs = load_data()
-for df, name in zip(dfs, ["ventas", "promos", "stock","prevision", "festivos"]):
+for df, name in zip(dfs, ["ventas", "promos", "stock","prevision", "festivos", "ventas_byprod"]):
     
     if name == "promos":
         df =df[['id', 'iniciopromo', 'finpromo', 'semanainicio', #'semanafin',
@@ -15,8 +15,8 @@ for df, name in zip(dfs, ["ventas", "promos", "stock","prevision", "festivos"]):
         'tipopromo']]
     print_df(df)
       
-    profile = ProfileReport(df, title='Pandas Profiling Report')
+    profile = ProfileReport(df, title='Pandas Profiling')
     profile.to_file(output_file="reports/eda/"+name+".html")
 
 
-ventas, promos, stock, prevision, festivos = dfs
+ventas, promos, stock, prevision, festivos, ventas_byprod = dfs
