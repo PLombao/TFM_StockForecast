@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from src.read_config import read_source_data
 from src.utils import get_agg_stats
 from src.cleaner import clean_ventas, clean_promos, clean_stock, clean_prevision
@@ -54,6 +55,30 @@ def load_ventas_byproduct(ventas=None):
     print("    Dataset ventas by product builded")
     return ventas_byprod
 
+def load_promos_range(promos=None):
+    print(" - Building dataset promos by range")
+    if type(promos) == type(None):
+        promos = load_csv("promos")
+    # Nos quedamos con las cols utiles y eliminamos promos repetidas
+    promos = promos[["iniciopromo","finpromo","producto"]].drop_duplicates()
+
+    # Inicializamos promos range
+    promos_rng = pd.DataFrame({})
+
+    for promo in promos.values:
+        # Añadimos una promocion como rango
+        dates = pd.date_range(promo[0], promo[1], freq='D')
+        df_promo = pd.DataFrame({"fecha": dates,
+                               "producto": promo[2]})
+        promos_rng=pd.concat([promos_rng, df_promo])
+
+    # Eliminamos promociones repetidas y añadimos flag de promo
+    promos_rng = promos_rng.drop_duplicates()
+    promos_rng["promo"] = 1
+
+    print("    Dataset promos by range builded")  
+    return promos_rng.reset_index(drop=True)
+
 def load_data():
     """
     Loads data from src
@@ -64,11 +89,13 @@ def load_data():
     prevision = load_csv("prevision")
     festivos = load_csv("festivos")
     ventas_byprod = load_ventas_byproduct(ventas)
+    promos_rng = load_promos_range(promos)
     
-    return ventas, promos, stock, prevision, festivos, ventas_byprod
+    return ventas, promos, stock, prevision, festivos, ventas_byprod, promos_rng
 
 if __name__ == "__main__":
     print("TESTING LOAD DATA")
-    ventas, promos, stock, prevision, festivos, ventas_byprod = load_data()
+    ventas, promos, stock, prevision, festivos, \
+        ventas_byprod,  promos_rng = load_data()
 
 
