@@ -11,7 +11,7 @@ def load_csv(dataset):
     [filename, dates, columns, shape] = read_source_data(dataset)
 
     # Load csv
-    path = "data/" + filename
+    path = "raw/data/" + filename
     print("Reading CSV in {}...".format(path))
     df = pd.read_csv(path, sep=";", decimal = ",", encoding='latin-1',
                     parse_dates=dates, dtype=columns)
