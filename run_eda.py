@@ -1,22 +1,35 @@
 from pandas_profiling import ProfileReport
-from src.load_data import load_data
+from src.load_data import load_csv, load_ventas_byproduct, load_promos_range, load_data
 
-def print_df(df):
-    print(df.shape)
-    print(df.head())
-    print(df.info())
+# PRINT EDA FOR THE ORIGINAL CSV  
+for name in ["ventas", "promos", "stock","prevision", "festivos"]:
 
-dfs = load_data()
-for df, name in zip(dfs, ["ventas", "promos", "stock","prevision", "festivos", "ventas_byprod"]):
+    df = load_csv(name)
     
     if name == "promos":
         df =df[['id', 'iniciopromo', 'finpromo', 'semanainicio', #'semanafin',
         'producto', 'preciotarifa', 'preciopromocion', #'cantidad', 
         'tipopromo']]
-    print_df(df)
-      
-    profile = ProfileReport(df, title='Pandas Profiling')
+     
+    df.to_csv("data/clean/"+ name + ".csv", index=False)
+    profile = ProfileReport(df, title='EDA for {} dataset.'.format(name))
     profile.to_file(output_file="reports/eda/"+name+".html")
 
+# PRINT EDA FOR VENTAS BY PROD (CLUSTERING DATA)
+ventas_byprod = load_ventas_byproduct()
+ventas_byprod.to_csv("data/clean/ventas_byprod.csv", index=False)
+profile = ProfileReport(df, title='EDA for ventas by prod dataset.')
+profile.to_file(output_file="reports/eda/ventas_byprod.html")
 
-ventas, promos, stock, prevision, festivos, ventas_byprod = dfs
+# PRINT EDA FOR PROMOS IN RANGE DATES
+promos_range = load_promos_range()
+promos_range.to_csv("data/clean/ventas_byprod.csv", index=False)
+profile = ProfileReport(promos_range, title='EDA for promos by range dataset.')
+profile.to_file(output_file="reports/eda/promos_byrange.html")
+
+
+# PRINT EDA FOR STOCK DATA
+df = load_data()
+df.to_csv("data/clean/stock_all.csv", index=False)
+profile = ProfileReport(df, title='EDA for STOCK dataset.')
+profile.to_file(output_file="reports/eda/stock_all.html")
