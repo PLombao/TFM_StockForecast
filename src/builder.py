@@ -14,6 +14,7 @@ def build_ventas_byproduct(ventas):
     ventas_byprod.columns = ["producto", "fecha_primera_venta", "fecha_ultima_venta","freq_venta"] + venta_names
     print("Dataset ventas by product builded")
     print('{:=^60}'.format(''))
+    print("")
     return ventas_byprod
 
 def build_stock_byproduct(stock):
@@ -27,6 +28,7 @@ def build_stock_byproduct(stock):
     stock_byprod.columns = ["producto", "fecha_primer_stock", "fecha_ultimo_stock","freq_stock"] + stock_names
     print("Dataset stock by product builded")
     print('{:=^60}'.format(''))
+    print("")
     return stock_byprod
 
 def build_promos_ranged(promos):
