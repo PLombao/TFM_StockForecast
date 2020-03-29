@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from src.read_config import read_source_data
 from src.cleaner import clean_csv, clean_ventas, clean_promos, clean_stock, clean_prevision, clean_festivos
-from src.cleaner import build_ventas_byproduct, build_promos_ranged, join_data
+from src.builder import build_ventas_byproduct, build_promos_ranged, join_data
 
 def load_csv(dataset):
     print('{:=^60}'.format('  LOAD DATASET {} '.format(dataset)))
@@ -14,12 +14,11 @@ def load_csv(dataset):
     path = "data/raw/" + filename
     print("Reading CSV in {}...".format(path))
     df = pd.read_csv(path, sep=";", decimal = ",", encoding='latin-1',
-                    parse_dates=dates, dtype=columns)
+                    parse_dates=dates, dtype=columns, dayfirst=True)
 
     # Check shape of dataframe file
     if df.shape != shape:
-        print("[WARNING] Check out shape of dataset {}.".format(dataset))
-        print("[WARNING] Should be {} and instead is {}.".format(shape, df.shape))
+        print("[WARNING] Shape should be {} and instead is {}.".format(shape, df.shape))
 
     # Clean csv
     df = clean_csv(df, dates[0])
@@ -75,14 +74,18 @@ def load_data():
 if __name__ == "__main__":
     print("TESTING LOAD DATA")
 
-    stock = load_data()
+    df = load_csv("ventas")
+    # df = load_csv("prevision")
+    # df = load_csv("stock")
+    # print(df.info())
+    # print(df.head())
+    # print(df.shape)
 
-    # # print(stock.info())
-    print(stock.head())
 
 
-    # print("Duplicates")
-    # print(stock.shape)
-    # print(stock.drop_duplicates().shape)
+
+
+
+
 
 
