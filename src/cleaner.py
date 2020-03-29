@@ -1,23 +1,6 @@
 import numpy as np
 import pandas as pd
-
-def clean_csv(df, datecol):
-    print('{:=^40}'.format('  CLEAN CSV  '.format()))
-    # Correct columns for all lowcase
-    df.columns = [col.lower() for col in df.columns]
-    print("Set columns to lowcase.")
-
-    # Sort by date
-    df = df.sort_values(datecol)
-    print("Sort values by date.")
-
-    # Drop duplicates
-    filter_data = df.drop_duplicates()
-    print("Dropped duplicates. Rows dropped: {}."\
-        .format(df.shape[0]-filter_data.shape[0]))
-
-    print('{:=^40}'.format(''.format()))
-    return filter_data
+from src.cleaner_utils import check_len_ts, clean_csv
 
 def clean_ventas(data):
     print('{:=^40}'.format('  CLEAN VENTAS  '.format()))
@@ -25,6 +8,8 @@ def clean_ventas(data):
     if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
         print("[WARNING] Ventas data with different units for same product & data. Rows: {}"\
             .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
+
+    check_len_ts(data, "fecha")
 
     # Pasamos a enteros las unidades truncando
     data.udsventa = data.udsventa.apply(lambda x: int(x))
@@ -58,6 +43,8 @@ def clean_promos(data):
 def clean_stock(data):
     print('{:=^40}'.format('  CLEAN STOCK  '.format()))
 
+    check_len_ts(data, "fecha")
+
     if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
         print("[WARNING] Stock data with different units for same product & data. Rows: {}"\
             .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
@@ -67,6 +54,9 @@ def clean_stock(data):
 
 def clean_prevision(data):
     print('{:=^40}'.format('  CLEAN PREVISION  '.format()))
+
+    check_len_ts(data, "fecha")
+    
     if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
         print("[WARNING] Ventas data with different units for same product & data. Rows: {}"\
             .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
