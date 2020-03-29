@@ -11,13 +11,9 @@ for name in ["ventas", "promos", "stock","prevision", "festivos"]:
 
     df = load_csv(name)
     
-    if name == "promos":
-        df =df[['id', 'iniciopromo', 'finpromo', 'semanainicio', #'semanafin',
-        'producto', 'preciotarifa', 'preciopromocion', #'cantidad', 
-        'tipopromo']]
-     
     df.to_csv("data/clean/"+ name + ".csv", index=False)
     if profiling:
+        if name=="promos": df = df.drop(['semanafin', 'cantidad'], axis = 1)
         profile = ProfileReport(df, title='EDA for {} dataset.'.format(name))
         profile.to_file(output_file="reports/eda/"+name+".html")
 
@@ -56,3 +52,15 @@ miss_stock = df.loc[df.udsstock.isna()]
 print("{} missings in udsstock of total rows {}".format(miss_stock.shape[0], df.shape[0]))
 miss_stock_wd = miss_stock.loc[(miss_stock.festivo != 1) & (miss_stock.weekday != 6)]
 print("{} missings in udsstock without holidays".format(miss_stock_wd.shape[0]))
+
+miss_stock = df.loc[df.udsventa.isna()]
+print("{} missings in udsventa of total rows {}".format(miss_stock.shape[0], df.shape[0]))
+miss_stock_wd = miss_stock.loc[(miss_stock.festivo != 1) & (miss_stock.weekday != 6)]
+print("{} missings in udsventa without holidays".format(miss_stock_wd.shape[0]))
+
+
+miss_stock = df.loc[df.udsprevisionempresa.isna()]
+print("{} missings in udsprevisionventa of total rows {}".format(miss_stock.shape[0], df.shape[0]))
+miss_stock_wd = miss_stock.loc[(miss_stock.festivo != 1) & (miss_stock.weekday != 6)]
+print("{} missings in udsprevisionventa without holidays".format(miss_stock_wd.shape[0]))
+
