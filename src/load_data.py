@@ -74,12 +74,20 @@ def load_data():
 if __name__ == "__main__":
     print("TESTING LOAD DATA")
 
-    df = load_csv("ventas")
+    # df = load_csv("ventas")
     # df = load_csv("prevision")
-    # df = load_csv("stock")
+    # stock = load_csv("stock")
+    # ventas = load_csv("ventas")
+    # prevision = load_csv("prevision")
+    # festivos = load_csv("festivos")
+    # promos_rng = load_promos_range()
     # print(df.info())
     # print(df.head())
     # print(df.shape)
+
+
+    load_data()
+
 
 
 

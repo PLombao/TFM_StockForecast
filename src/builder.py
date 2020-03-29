@@ -79,4 +79,5 @@ def join_data(stock, ventas, prevision, promos_rng, festivos):
 
     print("Output shape: {}".format(total.shape))
     print('{:=^60}'.format(''))
+    print("")
     return total
