@@ -36,7 +36,7 @@ def clean_promos(data):
     
     # Calculamos el ahorro de la promo
     filter_data['ahorro'] = filter_data['preciotarifa'] - filter_data['preciopromocion']
-    print("Created new variable ahorro (preciotarifa - preciopromo")
+    print("Created new variable ahorro (preciotarifa - preciopromo)")
     print('{:=^40}'.format(''.format()))
     return filter_data
 
