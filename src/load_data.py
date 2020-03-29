@@ -50,6 +50,13 @@ def load_ventas_byproduct(ventas=None):
     ventas_byprod = build_ventas_byproduct(ventas)
     return ventas_byprod
 
+def load_stock_byproduct(stock=None):
+    if type(stock) == type(None):
+        stock = load_csv("stock")
+
+    stock_byprod = build_stock_byproduct(stock)
+    return stock_byprod
+
 def load_promos_range(promos=None):
     if type(promos) == type(None):
         promos = load_csv("promos")

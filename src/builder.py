@@ -4,7 +4,7 @@ import pandas as pd
 from src.utils import get_agg_stats
 
 def build_ventas_byproduct(ventas):
-    print('{:=^60}'.format('  BUILD RANGED PROMOS  '))
+    print('{:=^60}'.format('  BUILD VENTAS BY PRODUCTO  '))
     venta_stats, venta_names = get_agg_stats("venta")
 
     ventas_byprod = ventas.groupby("producto").agg({"fecha":["min","max","count"],
@@ -15,6 +15,19 @@ def build_ventas_byproduct(ventas):
     print("Dataset ventas by product builded")
     print('{:=^60}'.format(''))
     return ventas_byprod
+
+def build_stock_byproduct(stock):
+    print('{:=^60}'.format('  BUILD STOCK BY PRODUCTO  '))
+    stock_stats, stock_names = get_agg_stats("stock")
+
+    stock_byprod = stock.groupby("producto").agg({"fecha":["min","max","count"],
+                                             "udsstock": stock_stats})
+    stock_byprod = stock_byprod.reset_index()
+
+    stock_byprod.columns = ["producto", "fecha_primer_stock", "fecha_ultimo_stock","freq_stock"] + stock_names
+    print("Dataset stock by product builded")
+    print('{:=^60}'.format(''))
+    return stock_byprod
 
 def build_promos_ranged(promos):
     print('{:=^60}'.format('  BUILD RANGED PROMOS  '))

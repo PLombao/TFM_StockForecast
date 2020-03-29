@@ -1,6 +1,6 @@
 import pandas as pd
-from src.load_data import load_csv, load_ventas_byproduct, load_promos_range, load_data
-from src.cleaner_utils import check_len_ts
+from src.load_data import load_csv, load_ventas_byproduct, load_promos_range, load_stock_byproduct, load_data
+
 
 profiling = False
 if profiling:
@@ -34,6 +34,13 @@ promos_range.to_csv("data/clean/promos_range.csv", index=False)
 if profiling:
     profile = ProfileReport(promos_range, title='EDA for promos by range dataset.')
     profile.to_file(output_file="reports/eda/promos_byrange.html")
+
+# PRINT EDA FOR STOCK BY PROD
+stock_byprod = load_stock_byproduct()
+stock_byprod.to_csv("data/clean/stock_byprod.csv", index=False)
+if profiling:
+    profile = ProfileReport(df, title='EDA for stock by prod dataset.')
+    profile.to_file(output_file="reports/eda/stock_byprod.html")
 
 
 # PRINT EDA FOR STOCK DATA
