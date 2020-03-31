@@ -14,12 +14,13 @@ def clean_ventas(data):
     # Pasamos a enteros las unidades truncando
     data.udsventa = data.udsventa.apply(lambda x: int(x))
     print("UnidadesVentas to integer.")
-
-    # Eliminamos ceros (no se especifican todos los ceros)
-    filter_data = data.loc[data.udsventa != 0].reset_index(drop=True)
-    print("Drop rows with zero in UnidadesVenta.")
-    print("  Rows dropped: {}"\
-        .format(data.shape[0]-filter_data.shape[0]))
+    
+    filter_data = data.reset_index(drop=True)
+    # # Eliminamos ceros (no se especifican todos los ceros)
+    # filter_data = data.loc[data.udsventa != 0].reset_index(drop=True)
+    # print("Drop rows with zero in UnidadesVenta.")
+    # print("  Rows dropped: {}"\
+    #     .format(data.shape[0]-filter_data.shape[0]))
 
     print('{:=^40}'.format(''.format()))
     return filter_data
