@@ -12,6 +12,7 @@ def clean_ventas(data):
         print("[WARNING] Ventas data with different units for same product & data. Rows: {}"\
             .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
 
+    # Check dates of timeseries
     check_len_ts(data, "fecha")
 
     # Pasamos a enteros las unidades truncando
@@ -47,6 +48,10 @@ def clean_promos(data):
 def clean_stock(data):
     print('{:=^40}'.format('  CLEAN STOCK  '.format()))
 
+    # Drop rows for products with no stock data
+    data = filter_rejected_products(data)
+
+    # Check dates of timeseries
     check_len_ts(data, "fecha")
 
     if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
@@ -59,6 +64,10 @@ def clean_stock(data):
 def clean_prevision(data):
     print('{:=^40}'.format('  CLEAN PREVISION  '.format()))
 
+    # Drop rows for products with no stock data
+    data = filter_rejected_products(data)
+
+    # Check dates of timeseries
     check_len_ts(data, "fecha")
     
     if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
