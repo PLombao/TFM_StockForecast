@@ -23,12 +23,24 @@ def check_len_ts(ts, datefield):
     miss_dates['weekday'] = miss_dates.fecha.apply(lambda dt: dt.weekday())
     miss_dates = miss_dates.merge(festivos, how='left').fillna(0)
 
-    print("Number of dates missings:                                {}".format(miss_dates.shape[0]))
+    print("[WARNING] Number of dates missings:                                {}".format(miss_dates.shape[0]))
     miss_work_dates = miss_dates.loc[(miss_dates.festivo != 1) & (miss_dates.weekday != 6)]
-    print("Number of dates missings (droping sundays and festivos): {}".format(miss_work_dates.shape[0]))
+    print("[WARNING] Number of dates missings (droping sundays and festivos): {}".format(miss_work_dates.shape[0]))
 
     return miss_work_dates.reset_index(drop=True)
     
+def filter_rejected_products(df):
+    """
+    Function to filter rejected products:
+    - products with no stock data
+    - products with no sells after 01-03-2020
+    """
+    rejected_products = pd.read_csv("config/rejected_products.csv", 
+                                    dtype={"producto":str})
+    df_out = df.loc[~df.producto.isin(rejected_products.producto)]
+    print("Dropped rows with data from products with no stock data or out-of-date (descatalogados). Rows dropped: {}"\
+            .format(df.shape[0]-df_out.shape[0]))
+    return df_out.reset_index(drop=True)
 
 def clean_csv(df, datecol):
     print('{:=^40}'.format('  CLEAN CSV  '.format()))

@@ -1,9 +1,12 @@
 import numpy as np
 import pandas as pd
-from src.cleaner_utils import check_len_ts, clean_csv
+from src.cleaner_utils import check_len_ts, clean_csv, filter_rejected_products
 
 def clean_ventas(data):
     print('{:=^40}'.format('  CLEAN VENTAS  '.format()))
+
+    # Drop rows for products with no stock data
+    data = filter_rejected_products(data)
 
     if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
         print("[WARNING] Ventas data with different units for same product & data. Rows: {}"\

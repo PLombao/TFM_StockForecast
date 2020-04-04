@@ -4,9 +4,7 @@ from src.read_config import read_source_data
 from src.cleaner import clean_csv, clean_ventas, clean_promos, clean_stock, clean_prevision, clean_festivos
 from src.builder import build_ventas_byproduct, build_stock_byproduct, build_promos_ranged, join_data
 
-def load_csv(dataset):
-    print('{:=^60}'.format('  LOAD DATASET {} '.format(dataset)))
-
+def load_raw_csv(dataset):
     # Read dataset info
     [filename, dates, columns, shape] = read_source_data(dataset)
 
@@ -22,6 +20,14 @@ def load_csv(dataset):
 
     # Clean csv
     df = clean_csv(df, dates[0])
+
+    return df
+
+def load_csv(dataset):
+    print('{:=^60}'.format('  LOAD DATASET {} '.format(dataset)))
+
+    # Load raw csv
+    df = load_raw_csv(dataset)
 
     # Clean datasets
     if dataset == "ventas": 
