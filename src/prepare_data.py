@@ -12,6 +12,9 @@ def _drop_missings(data):
     Returns:
         data (pd.DataFrame):    a filtered dataframe with only assignable missings
     """
+    # Dropping missing of days without correct data
+    data = data.loc[data.fecha < '2020-03-23']
+    print("Dropped rows corresponding to 23 to 26-03-2020 for not having the ventas data for these days.")
     return data
 
 def filter_train_data(data, producto):

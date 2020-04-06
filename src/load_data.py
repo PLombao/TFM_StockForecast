@@ -84,6 +84,22 @@ def load_data():
 
     return stock
 
+def load_clustering_data():
+    """
+    Loads the data for the clustering (with zeros instead of nans)
+    """
+    # Cargamos los datos de stock para tener todas las fechas
+    data = load_data()
+    data = data[['fecha','producto', 'udsventa']]
+    # Asignamos nulls como 0 en uds venta (TEMPORAL)
+    data.udsventa = data.udsventa.fillna(0)
+    # Quitamos los dias 23 a 26
+    data = data.loc[data.fecha < '2020-03-23']
+
+    clustering = build_ventas_byproduct(data)
+
+    return clustering
+
 if __name__ == "__main__":
     print("TESTING LOAD DATA")
 
@@ -99,7 +115,7 @@ if __name__ == "__main__":
     # print(df.shape)
 
 
-    load_data()
+    print(load_clustering_data())
 
 
 
