@@ -1,5 +1,5 @@
 import pandas as pd
-from src.load_data import load_csv, load_ventas_byproduct, load_promos_range, load_stock_byproduct, load_data
+from src.load_data import load_csv, load_ventas_byproduct, load_promos_range, load_stock_byproduct, load_data, load_clustering_data
 
 
 profiling = False
@@ -38,6 +38,12 @@ if profiling:
     profile = ProfileReport(df, title='EDA for stock by prod dataset.')
     profile.to_file(output_file="reports/eda/stock_byprod.html")
 
+# PRINT EDA FOR CLUSTERING DATA
+clustering = load_clustering_data()
+clustering.to_csv("data/clean/clustering.csv")
+if profiling:
+    profile = ProfileReport(df, title='EDA for STOCK dataset.')
+    profile.to_file(output_file="reports/eda/stock_all.html")
 
 # PRINT EDA FOR STOCK DATA
 df = load_data()

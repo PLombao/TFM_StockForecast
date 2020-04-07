@@ -13,20 +13,23 @@ def _drop_missings(data):
         data (pd.DataFrame):    a filtered dataframe with only assignable missings
     """
     # Dropping missing of days without correct data
-    data = data.loc[data.fecha < '2020-03-23']
+    filter_data = data.loc[data.fecha < '2020-03-23']
     print("Dropped rows corresponding to 23 to 26-03-2020 for not having the ventas data for these days.")
-    return data
+    print("Rows dropped: {}".format(data.shape[0] - filter_data.shape[0]))
+    return filter_data
 
-def filter_train_data(data, producto):
+def filter_train_data(data):
     """
     Filter the dataframe for the model given a producto
     Args:
         data (pd.DataFrame):    dataframe from clean/stock_all
-        producto (str):         the name of the product
     Returns:
         data (pd.DataFrame):    a filtered dataframe with only valid rows to train
     """
+    print('{:=^60}'.format('  FILTER TRAIN DATA  '))
     data = _drop_missings(data)
+    print("Output shape: {}".format(data.shape))
+    print('{:=^60}'.format(''))
     return data
 
 def split_data(data, target, test_size=0.25):
