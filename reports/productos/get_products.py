@@ -25,6 +25,8 @@ nosold = prod.dropna().loc[prod.fecha_ultima_venta < '2020-03-01']
 nosold.to_csv("reports/productos/nosold.csv", index=False)
 print(nosold)
 
+#print("GETTING PRODUCTS MANUALLY DISCARTED: 58, 80, 85, 95 y 99")
+
 print("CREATING CONFIG CSV FOR PRODUCTS NOT TO BE STUDIED")
 prod = pd.concat([nosold, nostock]).sort_values('producto')
 prod[['producto']].to_csv("config/rejected_products.csv", index=False)

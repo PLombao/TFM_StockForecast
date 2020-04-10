@@ -3,8 +3,8 @@ import numpy as np
 from src.read_config import read_source_data
 from src.cleaner_datasets import clean_ventas, clean_promos, clean_stock, clean_prevision, clean_festivos
 from src.cleaner_utils import clean_csv
-from src.builder import build_ventas_byproduct, build_stock_byproduct, build_promos_ranged
-from src.cleaner import join_data
+from src.builder import build_ventas_byproduct, build_stock_byproduct, build_promos_ranged, join_data
+from src.cleaner import cleaner
 
 def load_raw_csv(dataset):
     # Read dataset info
@@ -83,7 +83,7 @@ def load_data():
     promos_rng = load_promos_range()
 
     stock = join_data(stock, ventas, prevision, promos_rng, festivos)
-
+    stock = cleaner(stock)
     return stock
 
 def load_clustering_data():
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     # print(df.shape)
 
 
-    print(load_clustering_data())
+    print(load_data())
 
 
 

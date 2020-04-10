@@ -96,9 +96,6 @@ def join_data(stock, ventas, prevision, promos_rng, festivos):
     total["promo"] = total["promo"].fillna(0)
     total["festivo"] = total["festivo"].fillna(0)
 
-    # Add new columns weekday
-    total['weekday'] = total['fecha'].apply(lambda x: x.weekday())
-
     print("Output shape: {}".format(total.shape))
     print('{:=^60}'.format(''))
     print("")
