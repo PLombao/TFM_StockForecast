@@ -1,21 +1,28 @@
 import numpy as np
 import pandas as pd
 
-from src.utils import get_agg_stats
+from src.utils import get_agg_stats, get_dateagg_stats
 
 def build_ventas_byproduct(ventas):
     print('{:=^60}'.format('  BUILD VENTAS BY PRODUCTO  '))
+
+    # Build variables from date (dropping day with no ventas)
+    dateagg_stats, dateagg_names = get_dateagg_stats()
+    date_byprod = ventas.loc[ventas.udsventa != 0].groupby("producto").agg({"fecha": dateagg_stats})
+    date_byprod.columns = dateagg_names
+
+    # Build variables from uds venta
     venta_stats, venta_names = get_agg_stats("venta")
+    ventas_byprod = ventas.groupby("producto").agg({"udsventa": venta_stats})
+    ventas_byprod.columns = venta_names
 
-    ventas_byprod = ventas.groupby("producto").agg({"fecha":["min","max","count"],
-                                             "udsventa": venta_stats})
-    ventas_byprod = ventas_byprod.reset_index()
+    ## Merge both 
+    byprod = date_byprod.merge(ventas_byprod,  left_index=True, right_index=True, how='left').reset_index()
 
-    ventas_byprod.columns = ["producto", "fecha_primera_venta", "fecha_ultima_venta","freq_venta"] + venta_names
     print("Dataset ventas by product builded")
     print('{:=^60}'.format(''))
     print("")
-    return ventas_byprod
+    return byprod
 
 def build_stock_byproduct(stock):
     print('{:=^60}'.format('  BUILD STOCK BY PRODUCTO  '))

@@ -1,90 +1,44 @@
 import numpy as np
 import pandas as pd
-from src.cleaner_utils import check_len_ts, clean_csv, filter_rejected_products
 
-def clean_ventas(data):
-    print('{:=^40}'.format('  CLEAN VENTAS  '.format()))
+def join_data(stock, ventas, prevision, promos_rng, festivos):
+    print('{:=^60}'.format('  JOIN DATASET STOCK  '))
+    print("Input shape: {}".format(stock.shape))
 
-    # Drop rows for products with no stock data
-    data = filter_rejected_products(data)
+    # TEMPORARY: grouping stock by product and date
+    stock = stock.groupby(["fecha","producto"]).agg(lambda x: int(x.mean())).reset_index()
+    print("[WARNING] Dropping duplicates in fecha | producto for stock data [TEMPORARY]")
 
-    if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
-        print("[WARNING] Ventas data with different units for same product & data. Rows: {}"\
-            .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
-
-    # Check dates of timeseries
-    check_len_ts(data, "fecha")
-
-    # Pasamos a enteros las unidades truncando
-    data.udsventa = data.udsventa.apply(lambda x: int(x))
-    print("UnidadesVentas to integer.")
+    fecha_ini = stock.fecha.min().date()
+    fecha_fin = stock.fecha.max().date()
+    print("Stock dataframe received with data from {} to {}".format(fecha_ini, fecha_fin))
     
-    filter_data = data.reset_index(drop=True)
-    # # Eliminamos ceros (no se especifican todos los ceros)
-    # filter_data = data.loc[data.udsventa != 0].reset_index(drop=True)
-    # print("Drop rows with zero in UnidadesVenta.")
-    # print("  Rows dropped: {}"\
-    #     .format(data.shape[0]-filter_data.shape[0]))
+    # Creamos un df con todas las combinaciones de fechas y productos del dataset stock
+    total_dates = pd.DataFrame({"fecha": pd.date_range(fecha_ini, fecha_fin, freq='D'),
+                                "key":1})
+    total_products = pd.DataFrame({"producto": stock.producto.sort_values().unique(),
+                                   "key":1})
+    total = total_dates.merge(total_products, on='key').drop("key", axis=1)
+    print("Created dataframe for {} days and {} products [shape: {}]"\
+        .format(total_dates.shape[0],total_products.shape[0], total.shape))
 
-    print('{:=^40}'.format(''.format()))
-    return filter_data
+    # Hacemos un merge con los datos de stock, ventas, prevision y promos range
+    for df, name in zip([stock, ventas, prevision, promos_rng], ['stock', 'ventas','prevision', "promos range"]):
+        total = total.merge(df, on=['fecha', 'producto'], how='left')
+        print("Merged dataframe with {} data    [shape: {}]".format(name, total.shape))
 
-def clean_promos(data):
-    print('{:=^40}'.format('  CLEAN PROMOS  '.format()))
-    # Eliminamos promociones sin fecha final
-    filter_data = data.loc[~data.finpromo.isna()].reset_index(drop=True)
-    print("Drop rows of promos without end date:")
-    print("   Rows dropped: {}"\
-        .format(data.shape[0]-filter_data.shape[0]))
-    print("   The most recent of the promos dropped was started in {}"\
-        .format(data.loc[data.finpromo.isna(), "iniciopromo"].max()))
-    
-    # Calculamos el ahorro de la promo
-    filter_data['ahorro'] = filter_data['preciotarifa'] - filter_data['preciopromocion']
-    print("Created new variable ahorro (preciotarifa - preciopromo)")
-    print('{:=^40}'.format(''.format()))
-    return filter_data
+    # Hacemos un merge con los datos de festivos
+    total = total.merge(festivos, on=['fecha'], how='left')
+    print("Merged dataframe with festivos data    [shape: {}]".format(total.shape))
 
-def clean_stock(data):
-    print('{:=^40}'.format('  CLEAN STOCK  '.format()))
+    # Assign missings to 0 in promo & festivo
+    total["promo"] = total["promo"].fillna(0)
+    total["festivo"] = total["festivo"].fillna(0)
 
-    # Drop rows for products with no stock data
-    data = filter_rejected_products(data)
+    # Add new columns weekday
+    total['weekday'] = total['fecha'].apply(lambda x: x.weekday())
 
-    # Check dates of timeseries
-    check_len_ts(data, "fecha")
-
-    if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
-        print("[WARNING] Stock data with different units for same product & data. Rows: {}"\
-            .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
-
-    print('{:=^40}'.format(''.format()))
-    return data
-
-def clean_prevision(data):
-    print('{:=^40}'.format('  CLEAN PREVISION  '.format()))
-
-    # Drop rows for products with no stock data
-    data = filter_rejected_products(data)
-
-    # Check dates of timeseries
-    check_len_ts(data, "fecha")
-    
-    if data.shape[0] != data[['fecha',"producto"]].drop_duplicates().shape[0]:
-        print("[WARNING] Ventas data with different units for same product & data. Rows: {}"\
-            .format(data.shape[0] - data[['fecha',"producto"]].drop_duplicates().shape[0]))
-
-    data.udsprevisionempresa = data.udsprevisionempresa.apply(lambda x: int(x))
-    print("UnidadesPrevisionVentas to integer.")
-    print('{:=^40}'.format(''.format()))
-    return data
-
-def clean_festivos(data):
-    print('{:=^40}'.format('  CLEAN FESTIVOS  '.format()))
-    data = data.loc[:,['fecha', 'festivo']]
-    data.festivo = data.festivo.apply(lambda x: 1)
-    print("Drop unnecesary columns.")
-    print('{:=^40}'.format(''.format()))
-
-    return data
-
+    print("Output shape: {}".format(total.shape))
+    print('{:=^60}'.format(''))
+    print("")
+    return total

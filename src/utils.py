@@ -13,3 +13,13 @@ def get_agg_stats(variable):
                 "skew","kurtosis", "mad"]
     agg_names = [variable + "_" + x for x in agg_names]
     return agg_stats, agg_names
+
+def get_dateagg_stats():
+    """
+    Calculates the min_date, max_date, count and intermitence for a date column
+    """
+    dateagg_stats = ["min","max","count",
+                    lambda x: x.diff().mean().total_seconds()]
+    dateagg_names = ["fecha_min", "fecha_max","frecuencia","intermitencia"]
+
+    return dateagg_stats, dateagg_names

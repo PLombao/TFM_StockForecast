@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 from src.read_config import read_source_data
-from src.cleaner import clean_csv, clean_ventas, clean_promos, clean_stock, clean_prevision, clean_festivos
-from src.builder import build_ventas_byproduct, build_stock_byproduct, build_promos_ranged, join_data
+from src.cleaner_datasets import clean_ventas, clean_promos, clean_stock, clean_prevision, clean_festivos
+from src.cleaner_utils import clean_csv
+from src.builder import build_ventas_byproduct, build_stock_byproduct, build_promos_ranged
+from src.cleaner import join_data
 
 def load_raw_csv(dataset):
     # Read dataset info
@@ -91,10 +93,14 @@ def load_clustering_data():
     # Cargamos los datos de stock para tener todas las fechas
     data = load_data()
     data = data[['fecha','producto', 'udsventa']]
+
     # Asignamos nulls como 0 en uds venta (TEMPORAL)
     data.udsventa = data.udsventa.fillna(0)
+    print("Assingning nulls in udsVenta as 0 [TEMPORARY]")
+
     # Quitamos los dias 23 a 26
     data = data.loc[data.fecha < '2020-03-23']
+    print("Dropping dates from 23 to 26 March 20")
 
     clustering = build_ventas_byproduct(data)
 
