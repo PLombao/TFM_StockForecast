@@ -2,6 +2,7 @@
 *.pyc
 *.ipynb_checkpoints*
 .vscode/*
+mlruns/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

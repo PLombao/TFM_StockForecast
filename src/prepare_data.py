@@ -4,6 +4,7 @@
 
 from sklearn.model_selection import train_test_split
 
+
 def _drop_missings(data):
     """
     Function to drop the missings that can not be assigned
@@ -13,12 +14,35 @@ def _drop_missings(data):
         data (pd.DataFrame):    a filtered dataframe with only assignable missings
     """
     # Dropping missing of days without correct data
-    filter_data = data.loc[data.fecha < '2020-03-23']
+    filter_data = data.loc[data.fecha < '2020-03-23'].reset_index(drop=True)
     print("Dropped rows corresponding to 23 to 26-03-2020 for not having the ventas data for these days.")
     print("Rows dropped: {}".format(data.shape[0] - filter_data.shape[0]))
-    return filter_data
+    # Dropping missing of type 2 (periods longer than one day)
+    filter_data2 = filter_data.loc[filter_data.stockMissingType != 2].reset_index(drop=True)
+    print("Dropped rows corresponding to missing from periods longer than one day.")
+    print("Rows dropped: {}".format(filter_data.shape[0] - filter_data2.shape[0]))
+    return filter_data2
 
-def filter_train_data(data):
+def _assing_missings(data):
+    """
+    Function to assign missings
+    """
+    # Assign stock missings
+    data['udsstock'] = data['udsstock'].fillna(method='pad', limit=1)
+    print("Assigned missings in udstock with fill forward method with 1 period limit")
+
+    # Assing missings in uds venta as 0
+    data['udsventa'] = data['udsventa'].fillna(0)
+    print("Assigned missings in udsventa filling with 0")
+
+    # Assing missings in uds prevision as 0
+    data['udsprevisionempresa'] = data['udsprevisionempresa'].fillna(0)
+    print("Assigned missings in udsprevisionempresa filling with 0")
+
+
+    return data
+
+def prepare_train_data(data):
     """
     Filter the dataframe for the model given a producto
     Args:
@@ -28,6 +52,7 @@ def filter_train_data(data):
     """
     print('{:=^60}'.format('  FILTER TRAIN DATA  '))
     data = _drop_missings(data)
+    data = _assing_missings(data)
     print("Output shape: {}".format(data.shape))
     print('{:=^60}'.format(''))
     return data

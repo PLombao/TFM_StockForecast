@@ -1,6 +1,7 @@
 import pandas as pd
 
 def get_time_variables(data, datecol):
+    print("Getting datetime variables: weekday")
     # Add new columns weekday
     data['weekday'] = data[datecol].apply(lambda x: x.weekday())
 
@@ -35,11 +36,12 @@ def get_stockMissingTypeByProd(ts):
     return ts
 
 def get_stockMissingType(df):
+    print("Getting stock missing type")
     new_df = pd.DataFrame({})
     for product in df.producto.unique():
         new_df = pd.concat([new_df, get_stockMissingTypeByProd(df.loc[(df.producto==product)])])
-    return new_df
-
+    df = df.merge(new_df[['fecha','producto','stockMissingType']], how='left', on=['fecha','producto'] )
+    return df
 
 def create_variables(df):
     df = get_stockMissingType(df)
