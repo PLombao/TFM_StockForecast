@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 from math import sqrt
+from random import shuffle
 
-def validate(actual, pred):
+from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
+from math import sqrt
+def validate(actual, pred, y_mean=None):
     """
     Computes different metrics in order to validate a model (mape, mae, std_error, R2, RMSE). 
     
@@ -14,15 +17,31 @@ def validate(actual, pred):
         metrics (dictionary):   a dictionary which cointains the metrics that will evaluate the prediction 
                                 error of the model
     """
-    mape = np.mean(np.abs((np.array(actual) - np.array(pred)) / np.array(actual))) * 100
-    mae = mean_absolute_error(actual,pred)
-    mean_error = (actual-pred).mean()
+    metrics = {}
+    actual, pred = np.array(actual), np.array(pred)
+    # Base metrics
+    metrics["mean_error"] = (actual-pred).mean()
     std_error = np.std(actual-pred)
-    predict_out = sum(pred>actual+2*std_error)+sum(pred<actual-2*std_error)
-    r2 = r2_score(actual,pred)
-    rmse = sqrt(mean_squared_error(actual,pred))
-    metrics = {"mape": mape, "mae": mae, "mean_error": mean_error, "std_error": std_error, "predict_out": predict_out, "rmse": rmse, "r2": r2}
+    metrics["std_error"] = std_error
+    metrics["r2"] = r2_score(actual,pred)
+    metrics["predict_out"] = sum(pred>actual+2*std_error)+sum(pred<actual-2*std_error)
 
+    # Scale dependant metrics
+    metrics["mae"] = mean_absolute_error(actual,pred)
+    metrics["rmse"] = sqrt(mean_squared_error(actual,pred))
+
+    # Percentage metrics
+    metrics["mape"] = np.mean(np.abs(actual - pred) / actual) * 100
+    metrics["smape"] = np.mean(np.abs(actual - pred) / (actual + pred)) * 200
+
+    # Relative error metrics (relative to avg prediction)
+    if y_mean != None:
+        metrics["mdrae"] = np.median(np.abs((actual-pred)/(actual-y_mean)))
+    
+    # Scale-free error metrics
+    err_naive = np.mean(np.diff(np.array(actual)))
+    metrics["mase"] = np.mean(np.abs((actual-pred)/err_naive))
+    
     return metrics
 
 
@@ -87,7 +106,7 @@ def cross_validate(model, df, target, k, randomize=False):
     """
     print('{:=^80}'.format('  CROSS VALIDATE MODEL  '))
     # Initialize metrics list
-    mape, rmse, mae, mean_error, std_error = [], [], [], [], []
+    mape, rmse, mae, mean_error, std_error, smape, mdrae, mase = [], [], [], [], [], [], [], []
     print("Intializing Cross Validate Method...")
     # Iterate over the index for one fold
     for train_idx, test_idx in _kfold_cross_validation(df.index, k, randomize):
@@ -104,6 +123,10 @@ def cross_validate(model, df, target, k, randomize=False):
                 mae.append(metrics['mae'])
                 mean_error.append(metrics['mean_error'])
                 std_error.append(metrics['std_error'])
+                smape.append(metrics['smape'])
+                # mdrae.append(metrics['mdrae'])
+                mase.append(metrics['mase'])
+                
             except AttributeError:
                 print("Model has not EVALUATE method...unable to evaluate")
                 print("Only Custom Models with a evaluate method can be evaluated")
@@ -113,11 +136,15 @@ def cross_validate(model, df, target, k, randomize=False):
             break
     if mape != []:
         mape, rmse, mae, mean_error, std_error = np.array(mape), np.array(rmse), np.array(mae), np.array(mean_error), np.array(std_error)
+        smape, mdrae, mase = np.array(smape), np.array(mdrae), np.array(mase), 
         results = {"mape_mean": mape.mean(), "mape_std":mape.std(),
                    "rmse_mean": rmse.mean(), "rmse_std":rmse.std(),
                    "mae_mean": mae.mean(), "mae_std":mae.std(),
                    "mean_error_mean": mean_error.mean(), "mean_error_std":mean_error.std(),
-                   "std_error_mean": std_error.mean(), "std_error_std": std_error.std()}
+                   "std_error_mean": std_error.mean(), "std_error_std": std_error.std(),
+                   "smape_mean":smape.mean(), "smape_std":smape.std(), 
+                   # "mdrae_mean":mdrae.mean(), "mdrae_std":mdrae.std(),
+                   "mase_mean":mase.mean(), "mase_std":mase.std()}
         print("Cross Validation done with {} folds".format(k))
         print('{:=^80}'.format(''))
         return results

@@ -2,12 +2,13 @@ import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
 
-# from src.helpers_mlflow import log_mlflow
+from src.helpers_mlflow import log_mlflow
 from src.model import Model
 from src.read_config import read_config_model
 from src.prepare_data import split_data
 from src.preprocess import Normalize, FeatureSelection
 from src.validate import cross_validate
+
 
 def run(data, target, base_model, model_name):
     """
@@ -47,7 +48,7 @@ def run(data, target, base_model, model_name):
     print(metrics)
 
     # LOG IN MLFLOW
-    # log_mlflow(experiment_name, model, params, metrics, tags)
+    log_mlflow(experiment_name, model, params, metrics, tags)
 
     print('{:=^80}'.format(''))
     return model, metrics
@@ -83,7 +84,7 @@ def run_cv(data, target, base_model, model_name, k=5):
     print(cv_metrics)
 
     # Log in mlflow with no artifacts
-    # log_mlflow(experiment_name, None, params, cv_metrics, tags)
+    log_mlflow(experiment_name, None, params, cv_metrics, tags)
 
     return cv_metrics
 
