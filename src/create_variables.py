@@ -1,10 +1,32 @@
 import pandas as pd
 
-def get_time_variables(data, datecol):
-    print("Getting datetime variables: weekday")
+def get_time_variables(df, datecol):
+    print("Getting datetime variables: weekday, quarter, month, weekofyear")
     # Add new columns weekday
-    data['weekday'] = data[datecol].apply(lambda x: x.weekday())
+    df['weekday'] = df[datecol].dt.dayofweek
+    df['quarter'] = df[datecol].dt.quarter
+    df['month'] = df[datecol].dt.month
+    df['weekofyear'] = df[datecol].dt.weekofyear
 
+    return df
+
+def get_roll5wd(data, col):
+    print("Getting rolling windows of last 5 days by product and weekday for column {}".format(col))
+    colname = 'roll5wd_' + col
+    out = pd.DataFrame({})
+    for product in data['producto'].unique():
+        prod_data = data.loc[(data['producto'] == product)]
+        for wd in df['weekday'].unique():
+            day_data = prod_data.loc[(prod_data.festivo == 0) & (prod_data.weekday == wd)]
+            day_data[colname] = day_data[col].rolling(5, win_type='triang', min_periods=1).mean()
+            out = pd.concat([out, day_data])
+            
+    data = data.merge(out[['fecha','producto', colname]], how='left', on=['fecha','producto'])
+    return data
+
+def get_deltaStock(data):
+    print("Getting deltaStock as the difference of Stock from today to tomorrow")
+    data['deltaStock'] = data.udsstock.diff(periods=-1)
     return data
 
 def get_stockMissingTypeByProd(ts):
@@ -46,6 +68,9 @@ def get_stockMissingType(df):
 def create_variables(df):
     df = get_stockMissingType(df)
     df = get_time_variables(df, "fecha")
+    df = get_deltaStock(df)
+    for col in ['udsventa', 'udsstock', 'udsprevisionempresa']:
+        df = get_roll5wd(df, col)
 
     return df
 
