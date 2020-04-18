@@ -16,7 +16,7 @@ def get_roll5wd(data, col):
     out = pd.DataFrame({})
     for product in data['producto'].unique():
         prod_data = data.loc[(data['producto'] == product)]
-        for wd in df['weekday'].unique():
+        for wd in data['weekday'].unique():
             day_data = prod_data.loc[(prod_data.festivo == 0) & (prod_data.weekday == wd)]
             day_data[colname] = day_data[col].rolling(5, win_type='triang', min_periods=1).mean()
             out = pd.concat([out, day_data])
