@@ -17,23 +17,66 @@ def _drop_missings(data):
     filter_data = data.loc[data.fecha < '2020-03-23'].reset_index(drop=True)
     print("Dropped rows corresponding to 23 to 26-03-2020 for not having the ventas data for these days.")
     print("Rows dropped: {}".format(data.shape[0] - filter_data.shape[0]))
+
     # Dropping missing of type 2 (periods longer than one day)
-    filter_data2 = filter_data.loc[filter_data.stockMissingType != 2].reset_index(drop=True)
-    print("Dropped rows corresponding to missing from periods longer than one day.")
-    print("Rows dropped: {}".format(filter_data.shape[0] - filter_data2.shape[0]))
-    return filter_data2
+    # filter_data2 = filter_data.loc[filter_data.stockMissingType != 2].reset_index(drop=True)
+    # print("Dropped rows corresponding to missing from periods longer than one day.")
+    # print("Rows dropped: {}".format(filter_data.shape[0] - filter_data2.shape[0]))
+
+    return filter_data
+
+def _assing_missings_venta(df, col):
+    """Assign missings: 0 for holiday
+                        4wd rolling windows for else
+    """
+    print("Assigning missings for {}".format(col))
+    data = df.copy()
+    holiday_data = data.loc[(data['festivo'] == 1) | (data['weekday'] == 6)]
+    wd_data = data.loc[(data['festivo'] != 1) & (data['weekday'] != 6)]
+    
+    print("Missing in dataset:               {} ({} total rows).".format(sum(data[col].isna()), data.shape[0]))
+    print("Missings in holiday days:         {} ({} total rows).".format(sum(holiday_data[col].isna()), holiday_data.shape[0]))
+    print("Missings in working days:         {} ({} total rows).".format(sum(wd_data[col].isna()), wd_data.shape[0]))
+    
+    data.loc[(data['festivo'] == 1) | (data['weekday'] == 6), col] = holiday_data[col].fillna(0)
+    print("Assigned missings for holiday data - Remaining missings:      {}".format(sum(data[col].isna())))
+    
+    data.loc[(data['festivo'] != 1) & (data['weekday'] != 6), col] = wd_data[col].fillna(wd_data["roll4wd_" + col])
+    print("Assigned missings for working days data - Remaining missings: {}".format(sum(data[col].isna())))
+    return data
+
+def _assing_missings_stock(df, col):
+    """Assign missings: backfill for holiday
+                        4wd rolling windows for else???
+    """
+    print("Assigning missings for {}".format(col))
+    data = df.copy()
+    holiday_data = data.loc[(data['festivo'] == 1) | (data['weekday'] == 6)]
+    wd_data = data.loc[(data['festivo'] != 1) & (data['weekday'] != 6)]
+    
+    print("Missing in dataset:               {} ({} total rows).".format(sum(data[col].isna()), data.shape[0]))
+    print("Missings in holiday days:         {} ({} total rows).".format(sum(holiday_data[col].isna()), holiday_data.shape[0]))
+    print("Missings in working days:         {} ({} total rows).".format(sum(wd_data[col].isna()), wd_data.shape[0]))
+    
+    data['holiday_' + col] = data.fillna(method='bfill')
+    print("Assigned missings for holiday data - Remaining missings:      {}".format(sum(data[col].isna())))
+    
+    data.loc[(data['festivo'] != 1) & (data['weekday'] != 6), col] = wd_data[col].fillna(wd_data["roll4wd_" + col])
+    print("Assigned missings for working days data - Remaining missings: {}".format(sum(data[col].isna())))
+    return data
 
 def _assing_missings(data):
     """
     Function to assign missings
     """
-    # Assign stock missings
+    # Assign stock missings for holidays
+    data.loc[(data.festivos == )]
     data['udsstock'] = data['udsstock'].fillna(method='pad', limit=1)
     print("Assigned missings in udstock with fill forward method with 1 period limit")
 
-    # Assing missings in uds venta as 0
+    # Assing missings in uds venta
     data['udsventa'] = data['udsventa'].fillna(0)
-    print("Assigned missings in udsventa filling with 0")
+    print("Assigned missings in udsventa.")
 
     # Assing missings in uds prevision as 0
     data['udsprevisionempresa'] = data['udsprevisionempresa'].fillna(0)
