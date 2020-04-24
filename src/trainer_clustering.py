@@ -58,6 +58,7 @@ def plot_cluster(X):
 def train_DBSCAN(data, pca_components=2, eps=0.3, min_samples=3):
     
     # PCA
+    columns = data.columns
     pca = PCA(pca_components).fit(data)
     explained_variance = pca.explained_variance_ratio_
     pca_data = pca.transform(data)
@@ -80,7 +81,11 @@ def train_DBSCAN(data, pca_components=2, eps=0.3, min_samples=3):
     # Number of clusters in labels, ignoring noise if present.
     n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
     n_noise = list(labels).count(-1)
-
+    
+    # Sacamos as columnas con pca e os datos sen descartes
+    pca_cols = [col for col in data.columns if col[:3] == 'pca']
+    test_X = data.loc[data.labels != -1]
+    
     # Metrics
     metrics = {"n_features": X.shape[1],
                "epsilon": eps,
@@ -88,7 +93,8 @@ def train_DBSCAN(data, pca_components=2, eps=0.3, min_samples=3):
                "n_clusters": n_clusters,
                "n_noise": n_noise,
                "silhouette": silhouette_score(X, labels),
-               
+               "silouette_nonoise": silhouette_score(test_X[pca_cols], test_X[['labels']]),
+               "silouette_originaldata": silhouette_score(data[columns], data[['labels']]),
                "explained_pca_variance":sum(explained_variance)}
 
     print("Metrics:")
