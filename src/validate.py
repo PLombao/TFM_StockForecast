@@ -39,8 +39,8 @@ def validate(actual, pred, y_mean=None):
         metrics["mdrae"] = np.median(np.abs((actual-pred)/(actual-y_mean)))
     
     # Scale-free error metrics
-    err_naive = np.mean(np.diff(np.array(actual)))
-    metrics["mase"] = np.mean(np.abs((actual-pred)/err_naive))
+    err_naive = np.mean(np.abs(np.diff(np.array(actual))))
+    metrics["mase"] = np.mean((np.abs(actual-pred)/err_naive))
     
     return metrics
 

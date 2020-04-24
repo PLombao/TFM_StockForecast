@@ -51,18 +51,25 @@ def _assing_missings_stock(df, col):
     """
     print("Assigning missings for {}".format(col))
     data = df.copy()
-    holiday_data = data.loc[(data['festivo'] == 1) | (data['weekday'] == 6)]
-    wd_data = data.loc[(data['festivo'] != 1) & (data['weekday'] != 6)]
+    holiday_mask = (data['festivo'] == 1) | (data['weekday'] == 6)
+    wd_mask = (data['festivo'] != 1) & (data['weekday'] != 6)
+    holiday_data = data.loc[holiday_mask]
+    wd_data = data.loc[wd_mask]
     
     print("Missing in dataset:               {} ({} total rows).".format(sum(data[col].isna()), data.shape[0]))
     print("Missings in holiday days:         {} ({} total rows).".format(sum(holiday_data[col].isna()), holiday_data.shape[0]))
     print("Missings in working days:         {} ({} total rows).".format(sum(wd_data[col].isna()), wd_data.shape[0]))
     
-    data['holiday_' + col] = data.fillna(method='bfill')
-    print("Assigned missings for holiday data - Remaining missings:      {}".format(sum(data[col].isna())))
+    data['holiday_' + col] = data[col].fillna(method='bfill')
     
-    data.loc[(data['festivo'] != 1) & (data['weekday'] != 6), col] = wd_data[col].fillna(wd_data["roll4wd_" + col])
+    data.loc[wd_mask, col] = wd_data[col].fillna(wd_data["roll4wd_" + col])
     print("Assigned missings for working days data - Remaining missings: {}".format(sum(data[col].isna())))
+
+    data.loc[holiday_mask, col] = data.loc[holiday_mask, 'holiday_' + col]
+    print("Assigned missings for holiday data - Remaining missings:      {}".format(sum(data[col].isna())))
+
+    data.loc[data[col].isna(), col] =  data.loc[data[col].isna(), "meanwd_" + col]
+    print("Assigned left missings with the mean of the weekday - Remaining missings: {}".format(sum(data[col].isna())))
     return data
 
 def _assing_missings(data):
@@ -70,9 +77,8 @@ def _assing_missings(data):
     Function to assign missings
     """
     # Assign stock missings for holidays
-    data.loc[(data.festivos == )]
-    data['udsstock'] = data['udsstock'].fillna(method='pad', limit=1)
-    print("Assigned missings in udstock with fill forward method with 1 period limit")
+    data = _assing_missings_stock(data, "udsstock")
+    # data = data.loc[~data["udsstock"].isna()]
 
     # Assing missings in uds venta
     data['udsventa'] = data['udsventa'].fillna(0)
@@ -81,7 +87,6 @@ def _assing_missings(data):
     # Assing missings in uds prevision as 0
     data['udsprevisionempresa'] = data['udsprevisionempresa'].fillna(0)
     print("Assigned missings in udsprevisionempresa filling with 0")
-
 
     return data
 
@@ -98,7 +103,7 @@ def prepare_train_data(data):
     data = _assing_missings(data)
     print("Output shape: {}".format(data.shape))
     print('{:=^60}'.format(''))
-    return data
+    return data.reset_index(drop=True)
 
 def split_data(data, target, test_size=0.25):
     """

@@ -19,9 +19,10 @@ def get_roll4wd(data, col):
         for wd in data['weekday'].unique():
             day_data = prod_data.loc[(prod_data.festivo == 0) & (prod_data.weekday == wd)]
             day_data[colname] = day_data[col].rolling(4, win_type='triang', min_periods=1).mean()
+            day_data["meanwd_"+col] = day_data[col].mean()
             out = pd.concat([out, day_data])
             
-    data = data.merge(out[['fecha','producto', colname]], how='left', on=['fecha','producto'])
+    data = data.merge(out[['fecha','producto', colname, "meanwd_"+col]], how='left', on=['fecha','producto'])
     return data
 
 def get_deltaStock(data):

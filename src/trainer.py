@@ -70,7 +70,8 @@ def run_cv(data, target, base_model, model_name, k=5):
 
     # Get model info
     _, tags, params = read_config_model("stock", model_name)
-
+    tags["modelo"] = model_name
+    
     print('{:=^80}'.format('  RUN  '))
     print("Starting RUN on project {}.".format(experiment_name))
 

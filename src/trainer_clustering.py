@@ -45,11 +45,11 @@ def plot_cluster(X):
 
         xy = X.loc[(X.class_member_mask == True) & (X.core_samples == True)]
         plt.plot(xy[[x]], xy[[y]], 'o', markerfacecolor=tuple(col),
-                 markeredgecolor='k', markersize=14)
+                 markeredgecolor='k', markersize=14, label = "Cluster " + str(k))
 
         xy = X.loc[(X.class_member_mask == True) & (X.core_samples == False)]
         plt.plot(xy[[x]], xy[[y]], 'o', markerfacecolor=tuple(col),
-                 markeredgecolor='k', markersize=6)
+                 markeredgecolor='k', markersize=6, label="Cluster " + str(k))
 
     plt.xlabel(x)
     plt.ylabel(y)
@@ -104,21 +104,26 @@ def train_DBSCAN(data, pca_components=2, eps=0.3, min_samples=3):
 
 def search_best(data):
     full_metrics = []
-    for pca_components in range(2,5):
-        for eps in np.linspace(0.1,1,10):
-            for min_samples in range(5):
+    for pca_components in range(2,7):
+        for eps in np.linspace(0.1,1,10): 
+            for min_samples in range(2,6):
                 try:
                     metrics, results = train_DBSCAN(data, pca_components, eps, min_samples)
-                    full_metrics.append(metrics)
-                    plot_cluster(results)
-                    plt.savefig("reports/clustering/pca2_{}feat_{}eps_{}minsamples.png"\
-                        .format(pca_components, eps, min_samples))
+                    # Filtramos por el numero de clusters que queremos
+                    if True: #(metrics['n_clusters']>4) & (metrics['n_clusters']<20):
+                        # FIltramos por el numero de puntos ruidosos
+                        if True: #(metrics['n_noise']<10):
+                            full_metrics.append(metrics)
+                            plot_cluster(results)
+                            plt.savefig("reports/clustering/pca2_{}feat_{}eps_{}minsamples.png"\
+                                .format(pca_components, eps, min_samples))
                 except:
                     print("")
                     print("[ERROR] Problem training model with pca_components: {}, eps {} and min samples {}"\
                          .format(pca_components, eps, min_samples))
                     print("")
                     pass
+    
     all_metrics = pd.DataFrame(full_metrics).sort_values('silhouette', ascending=False)
     sns.pairplot(all_metrics).savefig("reports/clustering/metrics_pairplot.png")
     

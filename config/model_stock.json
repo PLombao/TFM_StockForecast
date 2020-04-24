@@ -1,7 +1,7 @@
 {
-    "Model1": {
-        "params": {},
+    "PR_68": {
+        "params": {"n_estimators":1000},
         "tags": {},
-        "variables": [
+        "variables": ["udsventa","udsprevisionventa"
         ]
     }}
