@@ -3,7 +3,7 @@
 #### 2) Split data into train and test
 
 from sklearn.model_selection import train_test_split
-
+import pandas as pd
 
 def _drop_missings(data):
     """
@@ -88,6 +88,10 @@ def _assing_missings(data):
     data['udsprevisionempresa'] = data['udsprevisionempresa'].fillna(0)
     print("Assigned missings in udsprevisionempresa filling with 0")
 
+    # Create the prevision ventas shifted for the seventh first days
+    for period in range(1,8):
+        data["udsprevision_" + str(period)] = data["udsprevision_" + str(period)].fillna(0)
+
     return data
 
 def prepare_train_data(data):
@@ -101,6 +105,7 @@ def prepare_train_data(data):
     print('{:=^60}'.format('  FILTER TRAIN DATA  '))
     data = _drop_missings(data)
     data = _assing_missings(data)
+
     print("Output shape: {}".format(data.shape))
     print('{:=^60}'.format(''))
     return data.reset_index(drop=True)

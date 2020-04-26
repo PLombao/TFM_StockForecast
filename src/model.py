@@ -40,7 +40,7 @@ class Model(mlflow.pyfunc.PythonModel):
         """
         model_input = clean_data(model_input)
         predicted_target = self._infer(model_input)
-        #predicted_target = self._postprocessor.postprocess(predicted_target)
+        predicted_target = self._postprocessor.postprocess(predicted_target)
         return predicted_target
 
     def _infer(self, model_input):

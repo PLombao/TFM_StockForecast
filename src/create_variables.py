@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def get_time_variables(df, datecol):
     print("Getting datetime variables: weekday, quarter, month, weekofyear")
@@ -7,8 +8,23 @@ def get_time_variables(df, datecol):
     df['quarter'] = df[datecol].dt.quarter
     df['month'] = df[datecol].dt.month
     df['weekofyear'] = df[datecol].dt.weekofyear
+    df['working_day'] = (df['weekday'] == 6) | (df['festivo'] == 1)
+    df['sin_weekday'] = df['weekday'].apply(lambda x: np.sin((2*np.pi/7)*x))
+    df['cos_weekday'] = df['weekday'].apply(lambda x: np.cos((2*np.pi/7)*x))
 
     return df
+
+def get_shifted_prevision(data, period):
+    out = pd.DataFrame({})
+    for product in data['producto'].unique():
+        prod_data = data.loc[(data['producto'] == product)]
+        prod_data['udsprevision_' + str(period)] = data['udsprevisionempresa'].shift(periods=period, fill_value=0)
+        out = pd.concat([out, prod_data])
+    data = data.merge(out[['fecha','producto', 'udsprevision_' + str(period)]], how='left', on=['fecha','producto'])
+    print("Created new variable with the prevision ventas shifted {} period/s.".format(period))
+    return data
+
+def get_diff_variable()
 
 def get_roll4wd(data, col):
     print("Getting rolling windows of last 5 days by product and weekday for column {}".format(col))
@@ -77,6 +93,10 @@ def create_variables(df):
     df = get_deltaStock(df)
     for col in ['udsventa', 'udsstock', 'udsprevisionempresa']:
         df = get_roll4wd(df, col)
+    
+    # Create the prevision ventas shifted for the seventh first days
+    for period in range(1,8):
+        df = get_shifted_prevision(df, period)
 
     return df
 

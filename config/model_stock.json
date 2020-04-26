@@ -1,7 +1,881 @@
 {
-    "PR_68": {
-        "params": {"n_estimators":1000},
-        "tags": {},
-        "variables": ["udsventa","udsprevisionventa"
+    "CL_0": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "11",
+            "14",
+            "17",
+            "18",
+            "19",
+            "24",
+            "5",
+            "9"
         ]
-    }}
+    },
+    "CL_1": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "12",
+            "21",
+            "22",
+            "26",
+            "30",
+            "31",
+            "32",
+            "35",
+            "36",
+            "38",
+            "40",
+            "42",
+            "43",
+            "45",
+            "46",
+            "48",
+            "49",
+            "50",
+            "52",
+            "53",
+            "55",
+            "59",
+            "60",
+            "61",
+            "62",
+            "63",
+            "64",
+            "66",
+            "67",
+            "68",
+            "69",
+            "72",
+            "77",
+            "79",
+            "84",
+            "87",
+            "94",
+            "96",
+            "98"
+        ]
+    },
+    "CL_2": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "37",
+            "57",
+            "58",
+            "73",
+            "78",
+            "85",
+            "88",
+            "89",
+            "91",
+            "97"
+        ]
+    },
+    "PR_1": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "1"
+        ]
+    },
+    "PR_10": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "10"
+        ]
+    },
+    "PR_11": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "11"
+        ]
+    },
+    "PR_12": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "12"
+        ]
+    },
+    "PR_13": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "13"
+        ]
+    },
+    "PR_14": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "14"
+        ]
+    },
+    "PR_15": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "15"
+        ]
+    },
+    "PR_17": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "17"
+        ]
+    },
+    "PR_18": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "18"
+        ]
+    },
+    "PR_19": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "19"
+        ]
+    },
+    "PR_2": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "2"
+        ]
+    },
+    "PR_20": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "20"
+        ]
+    },
+    "PR_21": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "21"
+        ]
+    },
+    "PR_22": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "22"
+        ]
+    },
+    "PR_23": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "23"
+        ]
+    },
+    "PR_24": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "24"
+        ]
+    },
+    "PR_26": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "26"
+        ]
+    },
+    "PR_28": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "28"
+        ]
+    },
+    "PR_29": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "29"
+        ]
+    },
+    "PR_3": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "3"
+        ]
+    },
+    "PR_30": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "30"
+        ]
+    },
+    "PR_31": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "31"
+        ]
+    },
+    "PR_32": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "32"
+        ]
+    },
+    "PR_35": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "35"
+        ]
+    },
+    "PR_36": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "36"
+        ]
+    },
+    "PR_37": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "37"
+        ]
+    },
+    "PR_38": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "38"
+        ]
+    },
+    "PR_4": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "4"
+        ]
+    },
+    "PR_40": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "40"
+        ]
+    },
+    "PR_42": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "42"
+        ]
+    },
+    "PR_43": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "43"
+        ]
+    },
+    "PR_45": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "45"
+        ]
+    },
+    "PR_46": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "46"
+        ]
+    },
+    "PR_48": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "48"
+        ]
+    },
+    "PR_49": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "49"
+        ]
+    },
+    "PR_5": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "5"
+        ]
+    },
+    "PR_50": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "50"
+        ]
+    },
+    "PR_52": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "52"
+        ]
+    },
+    "PR_53": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "53"
+        ]
+    },
+    "PR_55": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "55"
+        ]
+    },
+    "PR_57": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "57"
+        ]
+    },
+    "PR_58": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "58"
+        ]
+    },
+    "PR_59": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "59"
+        ]
+    },
+    "PR_60": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "60"
+        ]
+    },
+    "PR_61": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "61"
+        ]
+    },
+    "PR_62": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "62"
+        ]
+    },
+    "PR_63": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "63"
+        ]
+    },
+    "PR_64": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "64"
+        ]
+    },
+    "PR_66": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "66"
+        ]
+    },
+    "PR_67": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "67"
+        ]
+    },
+    "PR_68": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "68"
+        ]
+    },
+    "PR_69": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "69"
+        ]
+    },
+    "PR_72": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "72"
+        ]
+    },
+    "PR_73": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "73"
+        ]
+    },
+    "PR_74": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "74"
+        ]
+    },
+    "PR_77": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "77"
+        ]
+    },
+    "PR_78": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "78"
+        ]
+    },
+    "PR_79": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "79"
+        ]
+    },
+    "PR_80": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "80"
+        ]
+    },
+    "PR_84": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "84"
+        ]
+    },
+    "PR_85": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "85"
+        ]
+    },
+    "PR_87": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "87"
+        ]
+    },
+    "PR_88": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "88"
+        ]
+    },
+    "PR_89": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "89"
+        ]
+    },
+    "PR_9": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "9"
+        ]
+    },
+    "PR_91": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "91"
+        ]
+    },
+    "PR_94": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "94"
+        ]
+    },
+    "PR_95": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "95"
+        ]
+    },
+    "PR_96": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "96"
+        ]
+    },
+    "PR_97": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "97"
+        ]
+    },
+    "PR_98": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "98"
+        ]
+    },
+    "PR_99": {
+        "tags": {
+            "base_model": "random_forest",
+            "type": "monoproducto"
+        },
+        "params": {},
+        "variables": [],
+        "productos": [
+            "99"
+        ]
+    }
+}
