@@ -23,12 +23,12 @@ def train(data, base_model, modelo, products):
             train_data = pd.concat([train_data, prod_data])
 
     train_data = train_data.loc[train_data.working_day == 1].reset_index()
-    train_data = train_data[["udsventa","udsprevisionempresa", "udsstock",
+    train_data = train_data[["udsventa","udsprevisionempresa",
                  "promo", "sin_weekday", "cos_weekday",
-                 "quarter", 'quarter', 'month','udsprevision_1', 'udsprevision_2',
-                'udsprevision_7']]
+                 "quarter", 'month','udsprevisionempresa_shifted1', 'udsprevisionempresa_shifted2',
+                'udsstock_diff7',"udsventa_diff1", "udsstock_shifted-1"]]
 
-    metrics = run_cv(train_data, "udsstock", base_model, modelo)
+    metrics = run_cv(train_data, "udsstock_diff7", base_model, modelo)
 
     return metrics
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     from sklearn.ensemble import RandomForestRegressor
     base_model = RandomForestRegressor(n_estimators=200)
     
-    arg1 = "all"
+    arg1 = "demo"
     
     # Si especificamos todos, entrena todos los modelos configurados
     if arg1 == "all":
@@ -51,7 +51,7 @@ if __name__ == "__main__":
             config = json.load(config_file)
         for modelo in list(config):
             metrics = train(data, base_model, modelo, config[modelo]["productos"])
-    else:
+    elif arg1 == "demo":
         print("DEMO MODE")
         print("")
         modelo = "PR_91"
