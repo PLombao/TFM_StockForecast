@@ -8,50 +8,13 @@ def get_time_variables(df, datecol):
     df['quarter'] = df[datecol].dt.quarter
     df['month'] = df[datecol].dt.month
     df['weekofyear'] = df[datecol].dt.weekofyear
-    df['working_day'] = (df['weekday'] == 6) | (df['festivo'] == 1)
+    df['working_day'] = (df['weekday'] != 6) & (df['festivo'] == 0)
     df['sin_weekday'] = df['weekday'].apply(lambda x: np.sin((2*np.pi/7)*x))
     df['cos_weekday'] = df['weekday'].apply(lambda x: np.cos((2*np.pi/7)*x))
 
     return df
 
-def get_shifted_prevision(data, period):
-    out = pd.DataFrame({})
-    for product in data['producto'].unique():
-        prod_data = data.loc[(data['producto'] == product)]
-        prod_data['udsprevision_' + str(period)] = data['udsprevisionempresa'].shift(periods=period, fill_value=0)
-        out = pd.concat([out, prod_data])
-    data = data.merge(out[['fecha','producto', 'udsprevision_' + str(period)]], how='left', on=['fecha','producto'])
-    print("Created new variable with the prevision ventas shifted {} period/s.".format(period))
-    return data
-
-def get_diff_variable()
-
-def get_roll4wd(data, col):
-    print("Getting rolling windows of last 5 days by product and weekday for column {}".format(col))
-    colname = 'roll4wd_' + col
-    out = pd.DataFrame({})
-    for product in data['producto'].unique():
-        prod_data = data.loc[(data['producto'] == product)]
-        for wd in data['weekday'].unique():
-            day_data = prod_data.loc[(prod_data.festivo == 0) & (prod_data.weekday == wd)]
-            day_data[colname] = day_data[col].rolling(4, win_type='triang', min_periods=1).mean()
-            day_data["meanwd_"+col] = day_data[col].mean()
-            out = pd.concat([out, day_data])
-            
-    data = data.merge(out[['fecha','producto', colname, "meanwd_"+col]], how='left', on=['fecha','producto'])
-    return data
-
-def get_deltaStock(data):
-    print("Getting deltaStock as the difference of Stock from today to tomorrow")
-    out = pd.DataFrame({})
-    for product in data['producto'].unique():
-        prod_data = data.loc[(data['producto'] == product)]
-        prod_data['deltaStock'] = prod_data.udsstock.diff(periods=-1)
-        out = pd.concat([out, prod_data])
-    data = data.merge(out[['fecha','producto', 'deltaStock']], how='left', on=['fecha','producto'])
-    return data
-
-def get_stockMissingTypeByProd(ts):
+def _get_stockMissingTypeByProd(ts):
     """
     Creates a variable of the type of missings:
     0 - is not a missing
@@ -77,26 +40,52 @@ def get_stockMissingTypeByProd(ts):
     # Creamos variable stockMissingType
     ts['stockMissingType'] = ts['missing'] + ts['interval']
     ts = ts.drop(['missing','interval'], axis=1)
+    print("Get stock missing type")
     return ts
 
-def get_stockMissingType(df):
-    print("Getting stock missing type")
-    new_df = pd.DataFrame({})
-    for product in df.producto.unique():
-        new_df = pd.concat([new_df, get_stockMissingTypeByProd(df.loc[(df.producto==product)])])
-    df = df.merge(new_df[['fecha','producto','stockMissingType']], how='left', on=['fecha','producto'] )
-    return df
+def _get_roll4wd(day_data, col):
+    day_data["roll4wd_" + col] = day_data.loc[(day_data.festivo == 0), col].rolling(4, win_type='triang', min_periods=1).mean()
+    day_data["meanwd_" + col] = day_data.loc[(day_data.festivo == 0), col].mean()
+    print("Getting rolling windows of last 5 days by product and weekday for column {}".format(col))
+    return day_data
+
+def get_dateproduct_variables(prod_data):
+    drop_cols = prod_data.loc[:,~prod_data.columns.isin(["fecha", "producto"])].columns
+    out_prod_data = prod_data.copy()
+    out = pd.DataFrame({})
+    for wd in prod_data['weekday'].unique():
+        day_data = prod_data.loc[(prod_data.weekday == wd)]
+        # Get roll4wd and meanwd for stock, venta and prevision
+        for col in ['udsventa', 'udsstock', 'udsprevisionempresa']:
+            day_data = _get_roll4wd(day_data, col)
+        out = pd.concat([out, day_data])
+    out_prod_data = prod_data.drop(drop_cols, axis=1)
+    out_prod_data = out_prod_data.merge(out, how='left', on=['fecha','producto'])
+    return out_prod_data
+    
+def get_product_variables(data):
+    # Columnas a eliminar antes de hacer el merge
+    drop_cols = data.loc[:,~data.columns.isin(["fecha", "producto"])].columns
+    out_data = data.copy()
+    # Creamos un dataframe vacio
+    out = pd.DataFrame({})
+    for product in data['producto'].unique():
+        prod_data = data.loc[(data['producto'] == product)]
+
+        # Creamos la variable de tipo stock missing
+        prod_data = _get_stockMissingTypeByProd(prod_data)
+        # Get variables of date prod
+        prod_data = get_dateproduct_variables(prod_data)
+        
+        out = pd.concat([out, prod_data])
+    out_data = data.drop(drop_cols, axis=1)
+    out_data = out_data.merge(out, how='left', on=['fecha','producto'])
+    return out_data
 
 def create_variables(df):
-    df = get_stockMissingType(df)
+    print('{:=^40}'.format('  CREATE VARIABLES  '))
     df = get_time_variables(df, "fecha")
-    df = get_deltaStock(df)
-    for col in ['udsventa', 'udsstock', 'udsprevisionempresa']:
-        df = get_roll4wd(df, col)
-    
-    # Create the prevision ventas shifted for the seventh first days
-    for period in range(1,8):
-        df = get_shifted_prevision(df, period)
-
+    df = get_product_variables(df)
+    print('{:=^40}'.format(''))
     return df
 

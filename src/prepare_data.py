@@ -60,26 +60,27 @@ def _assing_missings_stock(df, col):
     print("Missings in holiday days:         {} ({} total rows).".format(sum(holiday_data[col].isna()), holiday_data.shape[0]))
     print("Missings in working days:         {} ({} total rows).".format(sum(wd_data[col].isna()), wd_data.shape[0]))
     
-    data['holiday_' + col] = data[col].fillna(method='bfill')
     
+    # Rellenamos los dias laborables con el roll4wd o la media del wd
     data.loc[wd_mask, col] = wd_data[col].fillna(wd_data["roll4wd_" + col])
-    print("Assigned missings for working days data - Remaining missings: {}".format(sum(data[col].isna())))
+    print("Assigned missings for working days data with the 4last wd rolling window - Remaining missings: {}"\
+        .format(sum(data[col].isna())))
+    data.loc[wd_mask, col] = wd_data[col].fillna(wd_data["meanwd_" + col])
+    print("Assigned left missings for working days data with the mean of the weekday - Remaining missings: {}"\
+        .format(sum(data[col].isna())))
 
-    data.loc[holiday_mask, col] = data.loc[holiday_mask, 'holiday_' + col]
-    print("Assigned missings for holiday data - Remaining missings:      {}".format(sum(data[col].isna())))
+    # Los datos que quedan suponemos que no hay negocio activo, bfill
+    data[col] = data[col].fillna(method='bfill')
+    print("Assigned missings for holiday data and no active business data - Remaining missings:      {}".\
+        format(sum(data[col].isna())))
 
-    data.loc[data[col].isna(), col] =  data.loc[data[col].isna(), "meanwd_" + col]
-    print("Assigned left missings with the mean of the weekday - Remaining missings: {}".format(sum(data[col].isna())))
+
     return data
 
 def _assing_missings(data):
     """
     Function to assign missings
     """
-    # Assign stock missings for holidays
-    data = _assing_missings_stock(data, "udsstock")
-    # data = data.loc[~data["udsstock"].isna()]
-
     # Assing missings in uds venta
     data['udsventa'] = data['udsventa'].fillna(0)
     print("Assigned missings in udsventa.")
@@ -87,12 +88,23 @@ def _assing_missings(data):
     # Assing missings in uds prevision as 0
     data['udsprevisionempresa'] = data['udsprevisionempresa'].fillna(0)
     print("Assigned missings in udsprevisionempresa filling with 0")
-
-    # Create the prevision ventas shifted for the seventh first days
-    for period in range(1,8):
-        data["udsprevision_" + str(period)] = data["udsprevision_" + str(period)].fillna(0)
+    # Assign stock missings for holidays
+    data = _assing_missings_stock(data, "udsstock")
+    # data = data.loc[~data["udsstock"].isna()]
 
     return data
+
+def _get_shifted(prod_data, column, period):
+    col_name = column + "_shifted" + str(period) 
+    prod_data[col_name] = prod_data[column].shift(periods=period, fill_value=0)
+    print("Get shifted variable for {} with period {}".format(column, period))
+    return prod_data
+
+def _get_diff(prod_data, column, period):
+    col_name = column + "_diff" + str(period)
+    prod_data[col_name] = prod_data[column].diff(periods=period)
+    print("Get diff variable for {} with period {}".format(column, period))
+    return prod_data
 
 def prepare_train_data(data):
     """
@@ -105,6 +117,19 @@ def prepare_train_data(data):
     print('{:=^60}'.format('  FILTER TRAIN DATA  '))
     data = _drop_missings(data)
     data = _assing_missings(data)
+
+    # Creamos las variables de shifted prevision
+    for period in range(1,8):
+        data = _get_shifted(data, 'udsprevisionempresa', period)
+    # Creamos las variables diff +1 y diff -1 para stock
+    for period in [-1,1,7]:
+        data = _get_diff(data, 'udsstock', period)
+    # Creamos la variabla diff +1 para ventas
+    data = _get_diff(data, 'udsventa', period = 1)
+    # Creamos la variable shifted -1 para stock
+    data = _get_shifted(data, 'udsstock', period = -1)
+
+    data = data.fillna(0) #TODO: temporal
 
     print("Output shape: {}".format(data.shape))
     print('{:=^60}'.format(''))
