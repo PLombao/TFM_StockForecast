@@ -16,7 +16,7 @@ def train(data, base_model, modelo, products):
     modeltype = modelo.split("_")[0]
     if modeltype == "PR":
         train_data = data_producto(data, base_model, products[0])
-    elif modeltype == "CL":
+    elif (modeltype == "CL") | (modeltype == "ALL"):
         train_data = pd.DataFrame({})
         for prod in products:
             prod_data = data_producto(data, base_model, prod)
@@ -25,10 +25,10 @@ def train(data, base_model, modelo, products):
     train_data = train_data.loc[train_data.working_day == 1].reset_index()
     train_data = train_data[["udsventa","udsprevisionempresa",
                  "promo", "sin_weekday", "cos_weekday",
-                 "quarter", 'month','udsprevisionempresa_shifted1', 'udsprevisionempresa_shifted2',
+                 "quarter", 'month','udsstock','udsprevisionempresa_shifted1', 'udsprevisionempresa_shifted2',
                 'udsstock_diff7',"udsventa_diff1", "udsstock_shifted-1"]]
 
-    metrics = run_cv(train_data, "udsstock_diff7", base_model, modelo)
+    metrics = run_cv(train_data, "udsstock", base_model, modelo)
 
     return metrics
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     from sklearn.ensemble import RandomForestRegressor
     base_model = RandomForestRegressor(n_estimators=200)
     
-    arg1 = "demo"
+    arg1 = "all"
     
     # Si especificamos todos, entrena todos los modelos configurados
     if arg1 == "all":

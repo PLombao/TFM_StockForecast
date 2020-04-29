@@ -128,6 +128,7 @@ def prepare_train_data(data):
     data = _get_diff(data, 'udsventa', period = 1)
     # Creamos la variable shifted -1 para stock
     data = _get_shifted(data, 'udsstock', period = -1)
+    data = _get_shifted(data, 'udsstock', period =1)
 
     data = data.fillna(0) #TODO: temporal
 
@@ -135,7 +136,7 @@ def prepare_train_data(data):
     print('{:=^60}'.format(''))
     return data.reset_index(drop=True)
 
-def split_data(data, target, test_size=0.25):
+def split_data(data, target, test_size=0.10):
     """
     Split data into: train_x, train_y, test_x, test_y. 
     Args:
@@ -151,7 +152,7 @@ def split_data(data, target, test_size=0.25):
     print("- Splitting the data with test proportion: {}% ...".format(test_size*100))
 
     # Split the data into training and test sets
-    train, test = train_test_split(data, test_size=test_size)
+    train, test = train_test_split(data, test_size=test_size, shuffle=False)
     # Split the data into training and tests with test equal to last 5 registers 
     #train, test = train_test_split(data, test_size=test_size, shuffle = False)
 

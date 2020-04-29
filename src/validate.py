@@ -41,6 +41,11 @@ def validate(actual, pred, y_mean=None):
     # Scale-free error metrics
     err_naive = np.mean(np.abs(np.diff(np.array(actual))))
     metrics["mase"] = np.mean((np.abs(actual-pred)/err_naive))
+
+    # Scale-free error metrics
+    err_naive_wd = np.mean(np.abs(np.diff(np.array(actual), n=7)))
+    metrics["mase_wd"] = np.mean((np.abs(actual-pred)/err_naive_wd))
+
     
     return metrics
 
@@ -106,7 +111,7 @@ def cross_validate(model, df, target, k, randomize=False):
     """
     print('{:=^80}'.format('  CROSS VALIDATE MODEL  '))
     # Initialize metrics list
-    mape, rmse, mae, mean_error, std_error, smape, mdrae, mase = [], [], [], [], [], [], [], []
+    mape, rmse, mae, mean_error, std_error, smape, mdrae, mase, mase_wd = [], [], [], [], [], [], [], [], []
     print("Intializing Cross Validate Method...")
     # Iterate over the index for one fold
     for train_idx, test_idx in _kfold_cross_validation(df.index, k, randomize):
@@ -126,6 +131,7 @@ def cross_validate(model, df, target, k, randomize=False):
                 smape.append(metrics['smape'])
                 # mdrae.append(metrics['mdrae'])
                 mase.append(metrics['mase'])
+                mase_wd.append(metrics['mase_wd'])
                 
             except AttributeError:
                 print("Model has not EVALUATE method...unable to evaluate")
@@ -136,7 +142,7 @@ def cross_validate(model, df, target, k, randomize=False):
             break
     if mape != []:
         mape, rmse, mae, mean_error, std_error = np.array(mape), np.array(rmse), np.array(mae), np.array(mean_error), np.array(std_error)
-        smape, mdrae, mase = np.array(smape), np.array(mdrae), np.array(mase), 
+        smape, mdrae, mase, mase_wd = np.array(smape), np.array(mdrae), np.array(mase), np.array(mase_wd)
         results = {"mape_mean": mape.mean(), "mape_std":mape.std(),
                    "rmse_mean": rmse.mean(), "rmse_std":rmse.std(),
                    "mae_mean": mae.mean(), "mae_std":mae.std(),
@@ -144,7 +150,8 @@ def cross_validate(model, df, target, k, randomize=False):
                    "std_error_mean": std_error.mean(), "std_error_std": std_error.std(),
                    "smape_mean":smape.mean(), "smape_std":smape.std(), 
                    # "mdrae_mean":mdrae.mean(), "mdrae_std":mdrae.std(),
-                   "mase_mean":mase.mean(), "mase_std":mase.std()}
+                   "mase_mean":mase.mean(), "mase_std":mase.std(),
+                   "mase_wd_mean":mase_wd.mean(), "mase_wd_std" :mase_wd.std()}
         print("Cross Validation done with {} folds".format(k))
         print('{:=^80}'.format(''))
         return results

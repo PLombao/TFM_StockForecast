@@ -1,7 +1,7 @@
-producto,fecha_primera_venta,fecha_ultima_venta,fecha_primer_stock,fecha_ultimo_stock
-33,2015-06-29,2020-03-20,,
-34,2015-06-30,2020-03-20,,
-81,2015-07-03,2020-03-20,,
-83,2016-08-22,2020-03-20,,
-92,2016-04-22,2020-03-18,,
-93,2016-01-19,2020-01-13,,
+producto,fecha_minima,fecha_maxima,fecha_primer_stock,fecha_ultimo_stock
+33,,,,
+34,,,,
+81,,,,
+83,,,,
+92,,,,
+93,,,,

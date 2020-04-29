@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from src.utils import get_agg_stats, get_dateagg_stats
+from src.utils import get_agg_stats, get_dateagg_stats, get_ratios
 
 def build_ventas_byproduct(ventas):
     print('{:=^60}'.format('  BUILD VENTAS BY PRODUCTO  '))
@@ -17,7 +17,11 @@ def build_ventas_byproduct(ventas):
     ventas_byprod.columns = venta_names
 
     ## Merge both 
-    byprod = date_byprod.merge(ventas_byprod,  left_index=True, right_index=True, how='left').reset_index()
+    byprod = date_byprod.merge(ventas_byprod,  left_index=True, right_index=True, how='left')
+    
+    # Build ratios for weekday or month:
+    ratios = get_ratios(ventas).set_index("producto")
+    byprod = byprod.merge(ratios,  left_index=True, right_index=True, how='left').reset_index()
 
     print("Dataset ventas by product builded")
     print('{:=^60}'.format(''))
