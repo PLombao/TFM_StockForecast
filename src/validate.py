@@ -33,6 +33,7 @@ def validate(actual, pred, y_mean=None):
     # Percentage metrics
     metrics["mape"] = np.mean(np.abs(actual - pred) / actual) * 100
     metrics["smape"] = np.mean(np.abs(actual - pred) / (actual + pred)) * 200
+    metrics["acc"] = max(0, 100 - metrics["mape"])
 
     # Relative error metrics (relative to avg prediction)
     if y_mean != None:

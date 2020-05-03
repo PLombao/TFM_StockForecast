@@ -120,7 +120,7 @@ def prepare_train_data(data):
 
     # Creamos las variables de shifted prevision
     for period in range(1,8):
-        data = _get_shifted(data, 'udsprevisionempresa', period)
+        data = _get_shifted(data, 'udsprevisionempresa', period*-1)
     # Creamos las variables diff +1 y diff -1 para stock
     for period in [-1,1,7]:
         data = _get_diff(data, 'udsstock', period)
@@ -129,6 +129,9 @@ def prepare_train_data(data):
     # Creamos la variable shifted -1 para stock
     data = _get_shifted(data, 'udsstock', period = -1)
     data = _get_shifted(data, 'udsstock', period =1)
+    data = _get_shifted(data, 'udsstock', period =7)
+
+    data = _get_shifted(data, 'udsventa', period =1)
 
     data = data.fillna(0) #TODO: temporal
 

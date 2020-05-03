@@ -128,3 +128,15 @@ def search_best(data):
     sns.pairplot(all_metrics).savefig("reports/clustering/metrics_pairplot.png")
     
     return all_metrics
+
+def get_dendogram(df):
+    # Calculate the distance between each sample
+    Z = hierarchy.linkage(df, 'ward')
+    
+    plt.figure(figsize=(20,10))
+    # Plot with Custom leaves
+    hierarchy.dendrogram(Z, leaf_rotation=90, leaf_font_size=8, labels=df.index, color_threshold=4)
+    
+    Z = pd.DataFrame(data=Z, columns = ['cl1','cl2','distance','num_lefs'])
+    
+    return Z

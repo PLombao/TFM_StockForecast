@@ -1,25 +1,18 @@
 import json
 import pandas as pd
 from src.load_data import load_data
-from src.prepare_data import prepare_train_data
-from src.trainer import run, run_cv
 
+from src.trainer import data_producto, run, run_cv
 
-def data_producto(data, base_model, prod):
-    data = data.loc[data.producto == prod]
-    print(data.head())
-    data = prepare_train_data(data)
-
-    return data
 
 def train(data, base_model, modelo, products):
     modeltype = modelo.split("_")[0]
     if modeltype == "PR":
-        train_data = data_producto(data, base_model, products[0])
+        train_data = data_producto(data,products[0])
     elif (modeltype == "CL") | (modeltype == "ALL"):
         train_data = pd.DataFrame({})
         for prod in products:
-            prod_data = data_producto(data, base_model, prod)
+            prod_data = data_producto(data, prod)
             train_data = pd.concat([train_data, prod_data])
 
     train_data = train_data.loc[train_data.working_day == 1].reset_index()

@@ -8,10 +8,26 @@ from src.read_config import read_config_model
 from src.prepare_data import split_data
 from src.preprocess import Normalize, FeatureSelection
 from src.validate import cross_validate
+from src.prepare_data import prepare_train_data
 from sklearn.model_selection import train_test_split
 
+def data_producto(data, prod):
+    data = data.loc[data.producto == prod]
+    data = prepare_train_data(data)
 
-def run(data, target, base_model, model_name):
+    data = data.loc[data.stockMissingType == 0].reset_index(drop=True)
+
+    data = data[["fecha","producto","udsventa","udsprevisionempresa",
+                 'udsstock']]
+
+    # data = data[["fecha","producto","udsventa","udsprevisionempresa",
+    #              "promo", "sin_weekday", "cos_weekday",
+    #              "quarter", 'month','udsstock','udsprevisionempresa_shifted1', 'udsprevisionempresa_shifted2',
+    #             'udsstock_diff7',"udsventa_diff1", "udsstock_shifted-1"]]
+
+    return data
+
+def run(data, target, base_model, params, tags):
     """
     Run a training of a machine learning model 
     Args:
@@ -25,10 +41,14 @@ def run(data, target, base_model, model_name):
     """    
     print('{:=^80}'.format('  RUN  '))
     
-    # Split data
-    train, test = train_test_split(data.reset_index(drop=True), test_size=0.1, shuffle=False)
+    # 
+    train_data = data.copy()
+    train_data = train_data.drop(["producto","fecha"], axis=1)
 
-    run_cv(train, target, base_model, model_name)
+    # Split data
+    train, test = train_test_split(train_data.reset_index(drop=True), test_size=0.1, shuffle=False)
+
+    run_cv(train, target, base_model, params, tags)
 
     train_x = train.drop([target], axis=1)
     test_x = test.drop([target], axis=1)
@@ -55,13 +75,14 @@ def run(data, target, base_model, model_name):
     pred_test = model._infer(test_x)
     predict_test = pd.DataFrame({"y_pred": pred_test, "y_real": np.array(test_y).reshape(-1)})
     predict_test["type"] = "test"
-    predict = pd.concat([predict_train, predict_test])
-    predict.index = data.index
+    predict = pd.concat([predict_train, predict_test]).reset_index(drop=True)
+    predict["fecha"] = data["fecha"]
+    predict["producto"] = data["producto"]
     
     print('{:=^80}'.format(''))
     return model, metrics, predict
 
-def run_cv(data, target, base_model, model_name, k=5):
+def run_cv(data, target, base_model, params, tags, k=5):
     """
     Performing a CV training
 
@@ -74,12 +95,8 @@ def run_cv(data, target, base_model, model_name, k=5):
         model:                      Trained model
         metrics (dict):             Dictionary with all the metrics for the model
     """    
-    experiment_name = "StockForecasting_1"
+    experiment_name = "StockForecasting_Enfoque"
 
-    # Get model info
-    _, tags, params = read_config_model("stock", model_name)
-    tags["modelo"] = model_name
-    tags["target"] = target
     print('{:=^80}'.format('  RUN  '))
     print("Starting RUN on project {}.".format(experiment_name))
 
