@@ -71,7 +71,7 @@ def join_data(stock, ventas, prevision, promos_rng, festivos):
     print("Input shape: {}".format(stock.shape))
 
     # TEMPORARY: grouping stock by product and date
-    stock = stock.groupby(["fecha","producto"]).agg(lambda x: int(x.mean())).reset_index()
+    stock = stock.groupby(["fecha","producto"])['udsstock'].agg(lambda x: int(x.mean())).reset_index()
     print("[WARNING] Dropping duplicates in fecha | producto for stock data [TEMPORARY]")
 
     fecha_ini = stock.fecha.min().date()
