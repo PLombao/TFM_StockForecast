@@ -12,6 +12,11 @@ def get_time_variables(df, datecol):
     df['sin_weekday'] = df['weekday'].apply(lambda x: np.sin((2*np.pi/7)*x))
     df['cos_weekday'] = df['weekday'].apply(lambda x: np.cos((2*np.pi/7)*x))
 
+    df['is_august'] = (df['month'] == 8) * 1
+    df["spring"] = ((df[datecol]>'2020-03-21') & (df[datecol]<'2020-06-21')) * 1
+    df["summer"] = ((df[datecol]>'2019-06-01') & (df[datecol]<'2019-09-21')) * 1
+    df["autumn"] = ((df[datecol]>'2019-09-21') & (df[datecol]<'2019-12-21')) * 1
+    df['winter'] = (df[datecol]>'2019-12-21') * 1
     return df
 
 def _get_stockMissingTypeByProd(ts):

@@ -48,7 +48,7 @@ def run(data, target, base_model, params, tags):
     # Split data
     train, test = train_test_split(train_data.reset_index(drop=True), test_size=0.1, shuffle=False)
 
-    run_cv(train, target, base_model, params, tags)
+    cv_metrics = run_cv(train, target, base_model, params, tags)
 
     train_x = train.drop([target], axis=1)
     test_x = test.drop([target], axis=1)
@@ -80,7 +80,7 @@ def run(data, target, base_model, params, tags):
     predict["producto"] = data["producto"]
     
     print('{:=^80}'.format(''))
-    return model, metrics, predict
+    return model, metrics, predict, cv_metrics
 
 def run_cv(data, target, base_model, params, tags, k=5):
     """

@@ -131,6 +131,9 @@ def prepare_train_data(data):
     data = _get_shifted(data, 'udsstock', period =1)
     data = _get_shifted(data, 'udsstock', period =7)
 
+    data = _get_shifted(data, 'roll4wd_udsstock', period =1)
+    data = _get_shifted(data, 'roll4wd_udsstock', period =7)
+    data["roll4_udstock_shifted1"] = data['udsstock_shifted1'].rolling(4, win_type='triang', min_periods=1).mean()
     data = _get_shifted(data, 'udsventa', period =1)
 
     data = data.fillna(0) #TODO: temporal
