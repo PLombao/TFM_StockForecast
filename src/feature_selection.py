@@ -1,6 +1,3 @@
-from scipy.stats import pearsonr, spearmanr, kendalltau
-from sklearn.preprocessing import StandardScaler
-from sklearn import linear_model
 import pandas as pd
 import numpy as np
 
@@ -9,6 +6,9 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn import linear_model
 from sklearn.feature_selection import RFE, SelectFromModel
 from sklearn.ensemble import RandomForestRegressor
+
+from src.load_data import load_data
+from src.prepare_data import prepare_train_data
 
 def get_ranked_correlation(df, target):
     df = pd.get_dummies(df, drop_first=True)
@@ -78,8 +78,6 @@ def get_sfm(X,y,estimator):
     sfm = pd.DataFrame({"features":X.columns, "coef":coef})
     return sfm.sort_values("coef", ascending=False).reset_index(drop=True)
     
-    
-
 def compute_feature_selection(df, target, features, estimator):
     df = pd.get_dummies(df, drop_first=True)
     
@@ -106,3 +104,21 @@ def compute_feature_selection(df, target, features, estimator):
     sfm = get_sfm(X,y,estimator)
     
     return corr, lasso, rfe, sfm
+
+main_df = load_data()
+
+prod = "30"
+data = main_df.loc[main_df.stockMissingType == 0].reset_index(drop=True)
+data = data.loc[data.producto == prod]
+data = prepare_train_data(data)
+features = ['udsprevisionempresa','promo', 'festivo',  'quarter', 'month', 'weekofyear',
+       'working_day', 'sin_weekday', 'cos_weekday', 'is_august', 'spring',
+       'summer', 'autumn', 'winter','roll4wd_udsprevisionempresa', 
+       'udsprevisionempresa_shifted-1', 'udsprevisionempresa_shifted-2',
+       'udsprevisionempresa_shifted-3', 'udsprevisionempresa_shifted-4',
+       'udsprevisionempresa_shifted-5', 'udsprevisionempresa_shifted-6',
+       'udsprevisionempresa_shifted-7','udsstock_shifted1', 'udsstock_shifted7', 
+        'roll4wd_udsstock_shifted1','roll4wd_udsstock_shifted7', 'roll4_udstock_shifted1',
+       'udsventa_shifted1']
+estimator = RandomForestRegressor(n_estimators=200) 
+compute_feature_selection(data, "udsstock", features, estimator)
