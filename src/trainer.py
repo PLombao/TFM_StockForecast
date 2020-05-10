@@ -65,19 +65,20 @@ def run(data, target, base_model, params, tags):
 
     # Evaluate model
     metrics = model.evaluate(test_x, test_y)
-    metrics['features'] = train_x.shape[1]
+    cv_metrics['features'] = train_x.shape[1]
     print(metrics)
 
     # Create df of predictions 
-    pred_train = model._infer(train_x)
-    predict_train = pd.DataFrame({"y_pred": pred_train, "y_real": np.array(train_y).reshape(-1)})
-    predict_train["type"] = "train"
-    pred_test = model._infer(test_x)
-    predict_test = pd.DataFrame({"y_pred": pred_test, "y_real": np.array(test_y).reshape(-1)})
-    predict_test["type"] = "test"
-    predict = pd.concat([predict_train, predict_test]).reset_index(drop=True)
-    predict["fecha"] = data["fecha"]
-    predict["producto"] = data["producto"]
+    # pred_train = model._infer(train_x)
+    # predict_train = pd.DataFrame({"y_pred": pred_train, "y_real": np.array(train_y).reshape(-1)})
+    # predict_train["type"] = "train"
+    # pred_test = model._infer(test_x)
+    # predict_test = pd.DataFrame({"y_pred": pred_test, "y_real": np.array(test_y).reshape(-1)})
+    # predict_test["type"] = "test"
+    # predict = pd.concat([predict_train, predict_test]).reset_index(drop=True)
+    # predict["fecha"] = data["fecha"]
+    # predict["producto"] = data["producto"]
+    predict = None
     
     print('{:=^80}'.format(''))
     return model, metrics, predict, cv_metrics
@@ -95,7 +96,7 @@ def run_cv(data, target, base_model, params, tags, k=5):
         model:                      Trained model
         metrics (dict):             Dictionary with all the metrics for the model
     """    
-    experiment_name = "StockForecasting_Enfoque"
+    experiment_name = "StockForecasting_Algorithms"
 
     print('{:=^80}'.format('  RUN  '))
     print("Starting RUN on project {}.".format(experiment_name))
