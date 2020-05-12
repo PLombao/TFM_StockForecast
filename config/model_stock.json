@@ -891,17 +891,6 @@
             "79"
         ]
     },
-    "PR_80": {
-        "tags": {
-            "base_model": "random_forest",
-            "type": "monoproducto"
-        },
-        "params": {},
-        "variables": [],
-        "productos": [
-            "80"
-        ]
-    },
     "PR_84": {
         "tags": {
             "base_model": "random_forest",
@@ -911,17 +900,6 @@
         "variables": [],
         "productos": [
             "84"
-        ]
-    },
-    "PR_85": {
-        "tags": {
-            "base_model": "random_forest",
-            "type": "monoproducto"
-        },
-        "params": {},
-        "variables": [],
-        "productos": [
-            "85"
         ]
     },
     "PR_87": {
@@ -990,17 +968,6 @@
             "94"
         ]
     },
-    "PR_95": {
-        "tags": {
-            "base_model": "random_forest",
-            "type": "monoproducto"
-        },
-        "params": {},
-        "variables": [],
-        "productos": [
-            "95"
-        ]
-    },
     "PR_96": {
         "tags": {
             "base_model": "random_forest",
@@ -1032,17 +999,6 @@
         "variables": [],
         "productos": [
             "98"
-        ]
-    },
-    "PR_99": {
-        "tags": {
-            "base_model": "random_forest",
-            "type": "monoproducto"
-        },
-        "params": {},
-        "variables": [],
-        "productos": [
-            "99"
         ]
     }
 }
