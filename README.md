@@ -1,5 +1,5 @@
 # TFM_StockForecast
-FUCK THIS SHIT
+
 ## MAIN
 
 ### RUN_TRAIN.py
