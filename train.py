@@ -12,8 +12,6 @@ def get_metadata(config_file, modelo):
             }
     return prods, tags
 
-
-
 def train(data, base_model, modelo, products, params, tags):
     modeltype = modelo.split("_")[0]
     if modeltype == "PR":
@@ -25,7 +23,9 @@ def train(data, base_model, modelo, products, params, tags):
             train_data = pd.concat([train_data, prod_data])
 
     train_data = train_data.loc[train_data.working_day == 1].reset_index()
-    train_data = train_data[["fecha","producto",'udsstock', 'roll4wd_udsprevisionempresa',
+    train_data = train_data[["fecha","producto",'udsstock', "udsventa_shifted1", "udsstock_shifted1",
+                            "udsprevisionempresa",
+                            'roll4wd_udsprevisionempresa',
                              'working_day', 'month', "quarter","weekofyear",
                              'summer', 'autumn', 'winter',"cos_weekday","sin_weekday",
                               'udsprevisionempresa_shifted-1','udsprevisionempresa_shifted-6',
