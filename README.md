@@ -1,7 +1,7 @@
 # TFM_StockForecast
 
 ## Estructura de Proyecto
-
+```
 ├── config
 │   ├── built_config.py
 │   ├── conda.yaml
@@ -52,7 +52,7 @@
 ├── run_eda.py
 ├── report_missings.py
 └── train.py
-
+```
 
 
 ## MAIN
