@@ -1,5 +1,60 @@
 # TFM_StockForecast
 
+## Estructura de Proyecto
+
+├── config
+│   ├── built_config.py
+│   ├── conda.yaml
+│   ├── model_clustering.json
+│   ├── model_stock.json
+│   ├── rejected_products.csv
+│   └── source_data.json
+├── data
+│   ├── clean
+│ 	│   ├── clustering.csv
+│	  │   ├── festivos.csv
+│	  │   ├── prevision.csv
+│	  │   ├── promos.csv
+│	  │   ├── promos_range.csv
+│	  │   ├── stock.csv
+│	  │   ├── stock_all.csv
+│	  │   ├── stock_byprod.csv
+│	  │   ├── ventas.csv
+│	  │   └── ventas_byprod.csv
+│	  └── raw
+│	      ├── 01_TablaVentas.csv
+│	      ├── 02_TablaPromos.csv
+│	      ├── 03_TablaStock.csv
+│	      ├── 04_PrevisionEmpresa.csv
+│	    	└── 05_Festivos.csv
+├── notebooks/*
+├── reports/*
+├── src
+│	  ├── builder.py
+│	  ├── cleaner.py
+│	  ├── cleaner_datasets.py
+│	  ├── cleaner_utils.py
+│	  ├── create_variables.py
+│	  ├── feature_selection.py
+│	  ├── helpers_mlflow.py
+│	  ├── keras_utils.py
+│  	├── load_data.py
+│  	├── model.py
+│  	├── prepare_data.py
+│	  ├── preprocess.py
+│	  ├── read_config.py
+│	  ├── trainer.py
+│	  ├── trainer_clustering.py
+│	  ├── utils.py
+│	 └── validate.py
+├── README.md
+├── .gitignore
+├── run_eda.py
+├── report_missings.py
+└── train.py
+
+
+
 ## MAIN
 
 ### RUN_TRAIN.py
