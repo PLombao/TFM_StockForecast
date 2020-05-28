@@ -57,15 +57,24 @@
 ## Contenido:
 
 
-Módulo de configuración [config]:
+- Módulo de configuración [config]:
+
 Contiene los archivos de configuración tales como los json con la información de los modelos, los productos rechazados o el entorno conda para la reproducibilidad del código.
-Módulo de datos [data]:
+
+- Módulo de datos [data]:
+
 Contiene los datos originales (raw) y transformados (clean) usados en el proyecto.
-Módulo de reporting [notebooks] [reports]:
+
+- Módulo de reporting [notebooks] [reports]:
+
 Tenemos tanto la carpeta de notebooks con todos los jupyters notebooks creados para el desarrollo del proyecto y exploración de datos como las imágenes con las figuras e informes HTML generados.
-Código fuente [src]:
+
+- Código fuente [src]:
+
 Contiene todos los scripts con las funciones y clases auxiliares necesitadas en todas las fases del proyecto para llevar a cabo el entrenamiento de modelos, la exploración de datos o la investigación de mejores modelos.
-Carpeta principal [main]:
+
+- Carpeta principal [main]:
+
 Contiene el gitignore, el readme y los ejecutables del proyecto, destacando entre ellos el train.py, el archivo encargado de entrenar de 1 a n modelos según lo configurado en el model_stock.json.
 
 
