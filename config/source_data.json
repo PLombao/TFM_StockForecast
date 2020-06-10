@@ -39,6 +39,17 @@
         },
         "rows": 27930
     },
+    "stock_real": {
+        "filename": "03_TablaStockReal.csv",
+        "dates": [
+            "fecha"
+        ],
+        "columns": {
+            "Producto": "str",
+            "udsStock": "Int64"
+        },
+        "rows": 13872
+    },
     "prevision": {
         "filename": "04_PrevisionEmpresa.csv",
         "dates": [
